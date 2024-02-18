@@ -51,7 +51,6 @@ export class UIController extends Component {
     }
 
     openPopup(context: string, timeOpen: number) {
-        console.log(context);
         this.popup.active = true;
         this.popupController.setContext(context);
         if(timeOpen <= 0) return;
