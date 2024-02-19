@@ -5,6 +5,8 @@ import gaEventEmitter from '../../../cc-common/cc30-arcade-base/Scripts/Common/g
 import EventCode from '../Common/EventCode';
 import { Network } from '../Network/Network';
 import { Data } from '../Common/Data';
+import { AnimationClip } from 'cc';
+import { Vec3 } from 'cc';
 const network = new Network();
 
 @ccclass('MainController')
@@ -12,7 +14,9 @@ export class MainController extends Component {
 
     @property(Node) ui: Node = null;
     @property(Node) GameController: Node;
-
+    @property(Node) Fire: Node;
+    @property(Node) BackScene: Node;
+    @property(Node) Ship: Node;
 
     private uiController: any;
     private isPlayerActive: boolean;
@@ -20,77 +24,103 @@ export class MainController extends Component {
     private timeActiveCurrent: number;
     private timeActive: number;
     private gameController: any;
-    
+    private backSceneController: any;
+    private shipController: any;
+
 
     protected start() {
+        this.ui.active = true;
         this.timeActive = 0.2;
         this.timeActiveCurrent = this.timeActive;
         this.uiController = this.ui.getComponent('UIController');
         this.gameController = this.GameController.getComponent('GameController');
+        this.backSceneController = this.BackScene.getComponent('BackSceneController');
+        this.shipController = this.Ship.getComponent('ShipController');
         this.login();
 
-        gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.CLAIM_GAME, this.claimGame);
         gaEventEmitter.instance.registerEvent(EventCode.SERVER.WEB_SOCKET_OPEN, this.joinGame.bind(this));
+        gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.CLAIM_GAME, this.claimGame.bind(this));
+        gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.FIRED_EVENT, this.firedEvent.bind(this));
 
     }
 
     protected update(dt: number): void {
-        if(this.timeActiveCurrent <= 0 ) {
+        if (this.timeActiveCurrent <= 0) {
             network.keepPlayerActive();
             this.timeActiveCurrent = this.timeActive;
         }
-        if(this.isPlayerActive){
+        if (this.isPlayerActive) {
             this.timeActiveCurrent -= dt;
         }
-        else if(!this.isPlayerActive) {
+        else if (!this.isPlayerActive) {
             this.timeActiveCurrent = this.timeActive;
             return;
         }
     }
 
     private login() {
-        network.login()
-            .then(()=>{
+        network.authenticate()
+            .then(() => {
                 this.uiController.openPopup('Đăng nhập thành công', 2);
             })
-            .catch(()=>{
+            .catch(() => {
                 this.uiController.openPopup('Đăng nhập thất bại', 2);
             })
     }
 
     private joinGame() {
-            network.joiGame()
-            .then(()=>{
+        network.joiGame()
+            .then(() => {
                 this.uiController.openPopup('Join game thành công', 2);
             })
-            .catch(()=>{
+            .catch(() => {
                 this.uiController.openPopup('Join game thất bại', 2);
             })
     }
 
     public startGame() {
+        Data.instance.muL = 0.0;
+        this.Fire.active = true;
+        this.backSceneController.isFly = true;
         const betValue = Data.instance.betValue;
         const stopRatioValue = Data.instance.ratioValue;
         network.startGame('10', betValue, stopRatioValue);
         this.uiController.startGame();
         this.isPlayerActive = true;
-        this.gameController.isStartGame = true;
+        this.shipController.startGame();
     }
 
-    public cashOut(){
+    public cashOut() {
         network.cashOut();
+        this.backSceneController.isFly = false;
+        this.restartRound();
     }
 
-    public firedEvent(){
+    public firedEvent() {
+        this.Fire.active = false;
+        this.backSceneController.isFly = false;
+        this.restartRound();
         this.uiController.firedEvent();
         this.gameController.isStartGame = false;
         this.isPlayerActive = false;
     }
 
-    public claimGame(){
+    public claimGame() {
+        this.Fire.active = false;
+        this.backSceneController.isFly = false;
+        this.restartRound();
         this.isPlayerActive = false;
         this.uiController.claimGame();
         this.gameController.isStartGame = false;
+    }
+
+    restartRound(){
+        this.backSceneController.restartRound();
+        this.uiController.preparing();
+        this.scheduleOnce(()=>{
+            this.Ship.position = new Vec3(0,-230,0);
+            this.uiController.setMuL('0.0');
+        },2);
     }
 }
 

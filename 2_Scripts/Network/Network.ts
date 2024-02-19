@@ -12,7 +12,7 @@ import gameCommonUtils from '../../../cc-common/cc-share/common/gameCommonUtils'
 export class Network extends Component {
     private socketManager: gaSocketManager;
 
-    public login(){
+    public authenticate(){
         return new Promise((resolve: Function, reject: Function)=>{
             let token = this.getToken();
             if (token != undefined) {
