@@ -7,6 +7,7 @@ import loadConfigAsync from '../../../cc-common/cc-share/shareServices/loadConfi
 import gaBaseConfig from '../../../cc-common/cc30-arcade-base/Scripts/Config/gaBaseConfig';
 import gaCommandID from '../../../cc-common/cc30-arcade-base/Scripts/Network/gaCommandID';
 import gameCommonUtils from '../../../cc-common/cc-share/common/gameCommonUtils';
+import { Data } from '../Common/Data';
 
 @ccclass('Network')
 export class Network extends Component {
@@ -63,7 +64,7 @@ export class Network extends Component {
         let cus =1+":"+stopRatio;    
 
         const payload = {
-            event: 'fg',
+            event: Data.instance.modeGame,
             data: {bId, cus }
         };
         return this.sendMessage(payload)

@@ -38,4 +38,6 @@ export class Data{
         return this._eventData;
     }
 
+    public modeGame: string;
+
 }

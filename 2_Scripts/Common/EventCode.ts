@@ -16,7 +16,7 @@ const EventCode = {
     },
 
     RESPONSE: {
-        JOIN_GAME_RESULT: 'jgr',
+        JOIN_GAME_RESULT: 'client-join-game-result',
         CLAIM_GAME: 'c',
         FIRED_EVENT: 'cd',
         NORMAL_GAME: 'n',

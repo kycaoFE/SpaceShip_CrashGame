@@ -41,6 +41,7 @@ export class MainController extends Component {
         gaEventEmitter.instance.registerEvent(EventCode.SERVER.WEB_SOCKET_OPEN, this.joinGame.bind(this));
         gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.CLAIM_GAME, this.claimGame.bind(this));
         gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.FIRED_EVENT, this.firedEvent.bind(this));
+        gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.JOIN_GAME_RESULT,this.checkStateGame.bind(this));
 
     }
 
@@ -124,5 +125,19 @@ export class MainController extends Component {
         },2);
     }
 
+    checkStateGame(data){
+        console.warn('data: ', data);
+        if(!data.player){
+            Data.instance.modeGame = 'ng';
+        }
+        else{
+            if(data.player.fg > 0) {
+                Data.instance.modeGame = 'fg';
+            }
+            else{
+                Data.instance.modeGame = 'ng';
+            }
+        }
+    }
 }
 
