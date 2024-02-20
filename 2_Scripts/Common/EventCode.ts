@@ -25,6 +25,8 @@ const EventCode = {
 
     STATE: {
         PREPARING: 'PREPARING',
+        WIN: 'WIN',
+        LOST: 'LOST',
     }
 
 }

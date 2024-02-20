@@ -17,6 +17,7 @@ export class ShipController extends Component {
     @property(Sprite) ShipSprite: Sprite;
     @property(Animation) ShipAnimation: Animation;
     @property(SpriteFrame) ShipIdle: SpriteFrame;
+    @property(Node) Astronaut: Node;
 
     private shipSpeed: number;
     public isFly: boolean;
@@ -24,11 +25,13 @@ export class ShipController extends Component {
     protected start(): void {
         const explosion = this.firedEvent.bind(this);
         gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.FIRED_EVENT, explosion);
+        gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.CLAIM_GAME, this.winGame.bind(this));
         gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.NORMAL_GAME, this.fly.bind(this));
         gaEventEmitter.instance.registerEvent(EventCode.STATE.PREPARING, this.idle.bind(this));
     }
     
     startGame(){
+        this.Astronaut.active = false;
         tween(this.node)
         .to(1, {position: new Vec3(0,0,0)})
         .start();
@@ -36,6 +39,13 @@ export class ShipController extends Component {
 
     firedEvent(){
         this.ShipAnimation.play('explosion');
+    }
+
+    winGame(){
+        this.Astronaut.active = true;
+        this.Astronaut.position = this.node.position;
+        gaEventEmitter.instance.emit(EventCode.STATE.WIN);
+        this.fly();
     }
 
     fly(){

@@ -47,7 +47,6 @@ export class Network extends Component {
 
             this.sendMessage(payload)
             .then(resolve())
-            .catch(reject());
         })
     }
 
@@ -59,18 +58,18 @@ export class Network extends Component {
         return this.sendMessage(payload)
     }
 
-    startGame(bId: string, betValue: number, stopRatio: number) {
+    public startGame(bId: string, betValue: number, stopRatio: number) {
         //bet:autoStopRatio
-        let cus = betValue+":"+stopRatio;    
+        let cus =1+":"+stopRatio;    
 
         const payload = {
-            event: 'ng',
+            event: 'fg',
             data: {bId, cus }
         };
         return this.sendMessage(payload)
     }
 
-    keepPlayerActive(){
+    public keepPlayerActive(){
         const payload = {
             event: 'pa'
         }
@@ -78,7 +77,7 @@ export class Network extends Component {
         console.log('keep');
     }
 
-    getToken(): string {
+    public getToken(): string {
         const TOKEN = loadConfigAsync.getConfig().TOKEN;
         let token = '';
         if (TOKEN) {
@@ -108,7 +107,7 @@ export class Network extends Component {
         return new Promise((resolve: Function, reject: Function)=>{
             this.socketManager.sendMessage(payload)
             .then(resolve())
-            .catch(reject());
+
         })
     }
 }

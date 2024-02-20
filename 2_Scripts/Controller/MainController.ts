@@ -114,6 +114,7 @@ export class MainController extends Component {
     }
 
     restartRound(){
+        network.joiGame();
         this.scheduleOnce(()=>{
             this.backSceneController.restartRound();
             this.uiController.preparing();
@@ -122,5 +123,6 @@ export class MainController extends Component {
             gaEventEmitter.instance.emit(EventCode.STATE.PREPARING);
         },2);
     }
+
 }
 
