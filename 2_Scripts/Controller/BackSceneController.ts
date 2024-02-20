@@ -26,9 +26,7 @@ export class BackSceneController extends Component {
     }
 
     restartRound(){
-        this.scheduleOnce(()=>{
             this.node.position = new Vec3(0,0,0);
-        }, 3);
     }
 }
 

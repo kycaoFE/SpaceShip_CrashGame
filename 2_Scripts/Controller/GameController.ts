@@ -1,7 +1,9 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node, instantiate } from 'cc';
 const { ccclass, property } = _decorator;
 
 import gaEventEmitter from '../../../cc-common/cc30-arcade-base/Scripts/Common/gaEventEmitter';
+import { Data } from '../Common/Data';
+import EventCode from '../Common/EventCode';
 
 @ccclass('GameController')
 export class GameController extends Component {
@@ -17,18 +19,26 @@ export class GameController extends Component {
         this.mainController = this.MainControllerNode.getComponent('MainController');
         this.uiController  = this.UINode.getComponent('UIController');
         this.isStartGame = false;
+
+        gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.PLAYER_INFO_UPDATE, this.updateMuL.bind(this));
     }
 
     update(deltaTime: number) {
 
     }
 
+    setDefault(){
+        
+    }
+
     clickStart(){
         if(!this.isStartGame){
             this.normalGame();
+            this.isStartGame = true;
         }
         else{
             this.cashOut();
+            this.isStartGame = false
         }
     }
 
@@ -38,6 +48,11 @@ export class GameController extends Component {
 
     cashOut(){
         this.mainController.cashOut();
+    }
+
+    updateMuL(data){
+        Data.instance.muL = data.player.mul;
+        this.uiController.setMuL(data.player.mul);
     }
 }
 

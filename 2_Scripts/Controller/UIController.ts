@@ -20,6 +20,7 @@ export class UIController extends Component {
     @property(Label) betValueLabel: Label;
     @property(Label) ratioValueLabel: Label;
 
+    @property(Button) buttonStart: Button;
     @property(Label) startLabel: Label;
 
     betButtonStatus: boolean = false;
@@ -63,6 +64,7 @@ export class UIController extends Component {
         this.betButtonStatus = !this.betButtonStatus;
         if(this.betButtonStatus){
             this.preparingController.activePanel(true, true);
+            this.betValueLabel.string = 'X';
         }
         else{
             this.preparingController.activePanel(false, true);
@@ -74,6 +76,7 @@ export class UIController extends Component {
         this.ratioButtonStatus = !this.ratioButtonStatus;
         if(this.ratioButtonStatus){
             this.preparingController.activePanel(true, false);
+            this.ratioValueLabel.string = 'X';
         }
         else{
             this.preparingController.activePanel(false, false);
@@ -90,22 +93,25 @@ export class UIController extends Component {
     }
 
     firedEvent() {
-        this.openPrepareArea(true);
-        this.startLabel.string = 'START';
-        this.startLabel.color = Color.BLACK;
+        this.buttonStart.node.active = false;
         this.muL.color = Color.RED;
     }
 
     claimGame() {
-        this.openPrepareArea(true);
-        this.startLabel.string = 'START';
-        this.startLabel.color = Color.BLACK;
+        this.buttonStart.node.active = false;
         this.muL.color = Color.GREEN;
     }
 
     setMuL(value: string){
         this.muL.node.active = true;
         this.muL.string = `x`+value;
+    }
+
+    preparing(){
+        this.openPrepareArea(true);
+        this.buttonStart.node.active = true;
+        this.startLabel.string = 'START';
+        this.muL.color = Color.WHITE;
     }
 }
 

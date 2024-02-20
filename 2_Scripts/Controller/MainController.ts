@@ -111,13 +111,12 @@ export class MainController extends Component {
         this.restartRound();
         this.isPlayerActive = false;
         this.uiController.claimGame();
-        this.gameController.isStartGame = false;
     }
 
     restartRound(){
-        this.backSceneController.restartRound();
-        this.uiController.preparing();
         this.scheduleOnce(()=>{
+            this.backSceneController.restartRound();
+            this.uiController.preparing();
             this.Ship.position = new Vec3(0,-230,0);
             this.uiController.setMuL('0.0');
         },2);

@@ -24,7 +24,7 @@ export class PreparingController extends Component {
         this.betStepValue = 10;
         this.ratioStepValue = 0.1;
         Data.instance.betValue = 100;
-        Data.instance.ratioValue = 2.0;
+        Data.instance.ratioValue = 10.0;
         this.setDefault();
     }
 
@@ -87,5 +87,6 @@ export class PreparingController extends Component {
     minusRatio(){
         Data.instance.ratioValue = Data.instance.ratioValue - this.ratioStepValue;
     }
+
 }
 
