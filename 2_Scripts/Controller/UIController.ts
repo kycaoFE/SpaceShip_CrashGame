@@ -41,9 +41,8 @@ export class UIController extends Component {
     setDefault(){
         this.popup.active = false;
         this.muL.node.active = false;
-        this.openPrepareArea(true);
-        // this.betValueLabel.string = Data.instance.betValue.toString();
-        // this.ratioValueLabel.string = Data.instance.ratioValue.toString();
+        this.betValueLabel.string = Data.instance.betValue.toString();
+        this.ratioValueLabel.string = Data.instance.ratioValue.toString();
     }
 
     openPrepareArea(status: boolean){
@@ -52,11 +51,15 @@ export class UIController extends Component {
     }
 
     openPopup(context: string, timeOpen: number) {
+        this.openPrepareArea(false);
+        this.buttonStart.node.active = false;
         this.popup.active = true;
         this.popupController.setContext(context);
         if(timeOpen <= 0) return;
         this.scheduleOnce(()=>{
             this.popup.active = false;
+            this.openPrepareArea(true);
+            this.buttonStart.node.active = true;
         }, timeOpen);
     }
 

@@ -21,7 +21,7 @@
     "_active": true,
     "_components": [],
     "_prefab": {
-      "__id__": 99
+      "__id__": 100
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -52,7 +52,7 @@
     },
     "autoReleaseAssets": false,
     "_globals": {
-      "__id__": 100
+      "__id__": 101
     },
     "_id": "76ec9342-d2a6-4104-875b-fa556cd56844"
   },
@@ -74,13 +74,13 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 96
-      },
-      {
         "__id__": 97
       },
       {
         "__id__": 98
+      },
+      {
+        "__id__": 99
       }
     ],
     "_prefab": null,
@@ -218,7 +218,7 @@
         "__id__": 26
       },
       {
-        "__id__": 87
+        "__id__": 88
       },
       {
         "__id__": 78
@@ -230,7 +230,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 95
+        "__id__": 96
       }
     ],
     "_prefab": null,
@@ -326,7 +326,7 @@
       "__id__": 77
     },
     "BackScene": {
-      "__id__": 87
+      "__id__": 88
     },
     "Ship": {
       "__id__": 78
@@ -2849,13 +2849,13 @@
     "_active": false,
     "_components": [
       {
-        "__id__": 84
-      },
-      {
         "__id__": 85
       },
       {
         "__id__": 86
+      },
+      {
+        "__id__": 87
       }
     ],
     "_prefab": null,
@@ -2910,6 +2910,9 @@
       },
       {
         "__id__": 83
+      },
+      {
+        "__id__": 84
       }
     ],
     "_prefab": null,
@@ -2944,7 +2947,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Rocket",
+    "_name": "Sprite",
     "_objFlags": 0,
     "_parent": {
       "__id__": 78
@@ -3081,7 +3084,47 @@
     "Fire": {
       "__id__": 77
     },
+    "ShipSprite": {
+      "__id__": 81
+    },
+    "ShipAnimation": {
+      "__id__": 84
+    },
+    "ShipIdle": {
+      "__uuid__": "eb11f805-4cef-44c7-a7fc-268f0f947910@737cf",
+      "__expectedType__": "cc.SpriteFrame"
+    },
     "_id": "213CBJrIFPJK1tz9EaEsOt"
+  },
+  {
+    "__type__": "cc.Animation",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 78
+    },
+    "_enabled": true,
+    "__prefab": null,
+    "playOnLoad": false,
+    "_clips": [
+      {
+        "__uuid__": "719b2428-a3bc-447b-b4ff-4884fc77e88c",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "74bf6ed1-e4d5-4935-a4a9-72aa5af06341",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "02b225e6-44a1-4d6b-8fcf-10b11927f68e",
+        "__expectedType__": "cc.AnimationClip"
+      }
+    ],
+    "_defaultClip": {
+      "__uuid__": "719b2428-a3bc-447b-b4ff-4884fc77e88c",
+      "__expectedType__": "cc.AnimationClip"
+    },
+    "_id": "dc+/6nHPlHULSN+Swl2dNg"
   },
   {
     "__type__": "cc.UITransform",
@@ -3173,19 +3216,19 @@
     },
     "_children": [
       {
-        "__id__": 88
+        "__id__": 89
       },
       {
-        "__id__": 90
+        "__id__": 91
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 93
+        "__id__": 94
       },
       {
-        "__id__": 94
+        "__id__": 95
       }
     ],
     "_prefab": null,
@@ -3223,13 +3266,13 @@
     "_name": "SpawnStarController",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 87
+      "__id__": 88
     },
     "_children": [],
     "_active": true,
     "_components": [
       {
-        "__id__": 89
+        "__id__": 90
       }
     ],
     "_prefab": null,
@@ -3267,7 +3310,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 88
+      "__id__": 89
     },
     "_enabled": true,
     "__prefab": null,
@@ -3282,16 +3325,16 @@
     "_name": "Planet_Start",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 87
+      "__id__": 88
     },
     "_children": [],
     "_active": true,
     "_components": [
       {
-        "__id__": 91
+        "__id__": 92
       },
       {
-        "__id__": 92
+        "__id__": 93
       }
     ],
     "_prefab": null,
@@ -3329,7 +3372,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 90
+      "__id__": 91
     },
     "_enabled": true,
     "__prefab": null,
@@ -3350,7 +3393,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 90
+      "__id__": 91
     },
     "_enabled": true,
     "__prefab": null,
@@ -3388,7 +3431,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 87
+      "__id__": 88
     },
     "_enabled": true,
     "__prefab": null,
@@ -3409,7 +3452,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 87
+      "__id__": 88
     },
     "_enabled": true,
     "__prefab": null,
@@ -3512,22 +3555,22 @@
   {
     "__type__": "cc.SceneGlobals",
     "ambient": {
-      "__id__": 101
-    },
-    "shadows": {
       "__id__": 102
     },
-    "_skybox": {
+    "shadows": {
       "__id__": 103
     },
-    "fog": {
+    "_skybox": {
       "__id__": 104
     },
-    "octree": {
+    "fog": {
       "__id__": 105
     },
-    "lightProbeInfo": {
+    "octree": {
       "__id__": 106
+    },
+    "lightProbeInfo": {
+      "__id__": 107
     },
     "bakedWithStationaryMainLight": false,
     "bakedWithHighpLightmap": false

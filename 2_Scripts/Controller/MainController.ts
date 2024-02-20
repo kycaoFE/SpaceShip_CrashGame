@@ -119,6 +119,7 @@ export class MainController extends Component {
             this.uiController.preparing();
             this.Ship.position = new Vec3(0,-230,0);
             this.uiController.setMuL('0.0');
+            gaEventEmitter.instance.emit(EventCode.STATE.PREPARING);
         },2);
     }
 }

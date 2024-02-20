@@ -21,6 +21,10 @@ const EventCode = {
         FIRED_EVENT: 'cd',
         NORMAL_GAME: 'n',
         PLAYER_INFO_UPDATE: 'piu',
+    },
+
+    STATE: {
+        PREPARING: 'PREPARING',
     }
 
 }
