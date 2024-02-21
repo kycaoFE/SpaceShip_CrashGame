@@ -72,7 +72,7 @@ export class MainController extends Component {
     private joinGame() {
         network.joiGame()
             .then(() => {
-                this.uiController.openPopup('Join game thành công', 2);
+                this.uiController.openPopup('Join game thành công', 2)
             })
             .catch(() => {
                 this.uiController.openPopup('Join game thất bại', 2);
@@ -81,7 +81,6 @@ export class MainController extends Component {
 
     public startGame() {
         Data.instance.muL = 0.0;
-        this.Fire.active = true;
         this.backSceneController.isFly = true;
         const betValue = Data.instance.betValue;
         const stopRatioValue = Data.instance.ratioValue;
@@ -97,7 +96,6 @@ export class MainController extends Component {
     }
 
     public firedEvent() {
-        this.Fire.active = false;
         // this.backSceneController.isFly = false;
         this.restartRound();
         this.uiController.firedEvent();
@@ -106,7 +104,6 @@ export class MainController extends Component {
     }
 
     public claimGame() {
-        this.Fire.active = false;
         // this.backSceneController.isFly = false;
         this.restartRound();
         this.isPlayerActive = false;

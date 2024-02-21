@@ -28,6 +28,7 @@ export class ShipController extends Component {
         gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.FIRED_EVENT, explosion);
         gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.CLAIM_GAME, this.winGame.bind(this));
         gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.NORMAL_GAME, this.fly.bind(this));
+        gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.FREE_GAME, this.fly.bind(this));
         gaEventEmitter.instance.registerEvent(EventCode.STATE.PREPARING, this.idle.bind(this));
     }
     
@@ -39,6 +40,7 @@ export class ShipController extends Component {
 
     firedEvent(){
         this.ShipAnimation.play('explosion');
+        this.Fire.active = false;
     }
 
     winGame(){
@@ -57,9 +59,11 @@ export class ShipController extends Component {
 
     fly(){
         this.ShipAnimation.play('fly');
+        this.Fire.active = true;
     }
 
     idle(){
+        this.Fire.active = false;
         this.ShipAnimation.stop();
         this.ShipSprite.node.active = true;
         this.ShipSprite.spriteFrame = this.ShipIdle;

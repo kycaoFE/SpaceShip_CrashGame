@@ -15,7 +15,7 @@ export class AstronautController extends Component {
 
     jumpOut(){
         tween(this.node)
-        .by(2, {position: new Vec3(0, -500, 0)})
+        .by(2, {position: new Vec3(0, -700, 0)})
         .call(()=>{
             this.node.active = false;
         })

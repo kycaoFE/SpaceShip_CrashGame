@@ -20,6 +20,7 @@ const EventCode = {
         CLAIM_GAME: 'c',
         FIRED_EVENT: 'cd',
         NORMAL_GAME: 'n',
+        FREE_GAME: 'f',
         PLAYER_INFO_UPDATE: 'piu',
     },
 

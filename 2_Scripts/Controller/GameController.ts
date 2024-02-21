@@ -33,7 +33,7 @@ export class GameController extends Component {
 
     clickStart(){
         if(!this.isStartGame){
-            this.normalGame();
+            this.startGame();
             this.isStartGame = true;
         }
         else{
@@ -42,7 +42,7 @@ export class GameController extends Component {
         }
     }
 
-    normalGame(){
+    startGame(){
         this.mainController.startGame();
     }
 
