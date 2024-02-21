@@ -81,13 +81,11 @@ export class MainController extends Component {
 
     public startGame() {
         Data.instance.muL = 0.0;
-        this.backSceneController.isFly = true;
         const betValue = Data.instance.betValue;
         const stopRatioValue = Data.instance.ratioValue;
         network.startGame('10', betValue, stopRatioValue);
         this.uiController.startGame();
         this.isPlayerActive = true;
-        this.shipController.startGame();
     }
 
     public cashOut() {
@@ -126,16 +124,16 @@ export class MainController extends Component {
         console.warn('data: ', data);
         if(!data.player){
             Data.instance.modeGame = 'ng';
-            this.uiController.setModeButton('NORMAL GAME');
+            this.uiController.setModeButton('NORMAL');
         }
         else{
             if(data.player.fg >= 0) {
                 Data.instance.modeGame = 'fg';
-                this.uiController.setModeButton('FREE GAME');
+                this.uiController.setModeButton('FREE');
             }
             else{
                 Data.instance.modeGame = 'ng';
-                this.uiController.setModeButton('NORMAL GAME');
+                this.uiController.setModeButton('NORMAL');
             }
         }
         this.uiController.preparing();

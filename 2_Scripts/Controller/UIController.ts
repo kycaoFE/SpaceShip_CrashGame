@@ -111,7 +111,7 @@ export class UIController extends Component {
 
     setMuL(value: string){
         this.muL.node.active = true;
-        this.muL.string = `x`+value;
+        this.muL.string = value+`x`;
     }
 
     preparing(){

@@ -9,12 +9,15 @@ import { Animation } from 'cc';
 import { SpriteFrame } from 'cc';
 import { Sprite } from 'cc';
 import { TWO_PI } from 'cc';
+import { Data } from '../Common/Data';
 
 
 @ccclass('ShipController')
 export class ShipController extends Component {
 
     @property(Node) Fire: Node;
+    @property(Animation) FireAnimation: Animation;
+    @property(Animation) SmokeAnimation: Animation;
     @property(Sprite) ShipSprite: Sprite;
     @property(Animation) ShipAnimation: Animation;
     @property(SpriteFrame) ShipIdle: SpriteFrame;
@@ -22,25 +25,37 @@ export class ShipController extends Component {
 
     private shipSpeed: number;
     public isFly: boolean;
+    public isFastFly: boolean;
 
     protected start(): void {
+        this.SmokeAnimation.node.active = false;
+        this.isFastFly = false;
         const explosion = this.firedEvent.bind(this);
         gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.FIRED_EVENT, explosion);
         gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.CLAIM_GAME, this.winGame.bind(this));
-        gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.NORMAL_GAME, this.fly.bind(this));
-        gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.FREE_GAME, this.fly.bind(this));
+        gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.NORMAL_GAME, this.startGame.bind(this));
+        gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.FREE_GAME, this.startGame.bind(this));
         gaEventEmitter.instance.registerEvent(EventCode.STATE.PREPARING, this.idle.bind(this));
+    }
+
+    protected update(dt: number): void {
+        if(this.isFly) {
+            this.ShipAnimation.getState('fly').speed = 1/Data.instance.muL;
+        }
+        if(!this.isFastFly && this.node.position.y >= 0){
+            this.fly();
+            this.isFastFly = true;
+        }
     }
     
     startGame(){
-        tween(this.node)
-        .to(1, {position: new Vec3(0,0,0)})
-        .start();
-    }
-
-    firedEvent(){
-        this.ShipAnimation.play('explosion');
-        this.Fire.active = false;
+        this.beginFly();
+        // tween(this.node)
+        // .to(0.78, {position: new Vec3(0,0,0)})
+        // .call(()=>{
+        //     this.fly();
+        // })
+        // .start();
     }
 
     winGame(){
@@ -57,17 +72,38 @@ export class ShipController extends Component {
             .start();
     }
 
-    fly(){
-        this.ShipAnimation.play('fly');
-        this.Fire.active = true;
-    }
-
     idle(){
+        this.isFly = false;
         this.Fire.active = false;
         this.ShipAnimation.stop();
         this.ShipSprite.node.active = true;
         this.ShipSprite.spriteFrame = this.ShipIdle;
         console.warn('prepare');
+    }
+
+    fly(){
+        this.isFly = true;
+        this.ShipAnimation.play('fly');
+        this.Fire.active = true;
+        this.SmokeAnimation.node.active = false;
+    }
+
+    beginFly(){
+        this.isFastFly = false;
+        this.ShipAnimation.play('fly');
+        this.SmokeAnimation.node.active = true;
+        this.SmokeAnimation.play();
+        this.Fire.active = true;
+        this.FireAnimation.play('small_fire');
+        this.scheduleOnce(()=>{
+            this.SmokeAnimation.node.active = false;
+            this.FireAnimation.play('ship_fire');
+        }, 0.78)
+    }
+
+    firedEvent(){
+        this.ShipAnimation.play('explosion');
+        this.Fire.active = false;
     }
 }
 
