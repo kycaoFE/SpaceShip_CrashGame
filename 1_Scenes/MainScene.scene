@@ -842,9 +842,9 @@
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 20,
-    "_fontSize": 20,
+    "_fontSize": 12,
     "_fontFamily": "Arial",
-    "_lineHeight": 40,
+    "_lineHeight": 30,
     "_overflow": 1,
     "_enableWrapText": false,
     "_font": null,
@@ -3147,7 +3147,7 @@
         "__id__": 89
       }
     ],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 94
@@ -3497,9 +3497,6 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "gravity": -9.8,
-    "initialVelocity": 5,
-    "bounceHeight": 5,
     "_id": "26pa5P1C5Hi4Ih2bJYXFOP"
   },
   {

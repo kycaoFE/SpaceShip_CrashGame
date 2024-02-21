@@ -3,6 +3,8 @@ const { ccclass, property } = _decorator;
 
 import { Data } from '../Common/Data';
 import { Vec3 } from 'cc';
+import gaEventEmitter from '../../../cc-common/cc30-arcade-base/Scripts/Common/gaEventEmitter';
+import EventCode from '../Common/EventCode';
 
 @ccclass('BackSceneController')
 export class BackSceneController extends Component {
@@ -13,6 +15,10 @@ export class BackSceneController extends Component {
     start() {
         this.speed = 100;
         this.isFly = false;
+
+        gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.CLAIM_GAME, ()=>{
+            this.speed = 300;
+        })
     }
 
     update(deltaTime: number) {
@@ -20,8 +26,6 @@ export class BackSceneController extends Component {
             const mul = Data.instance.muL
             this.speed = mul*200;
             this.node.position = new Vec3(this.node.position.x, this.node.position.y - this.speed*deltaTime, this.node.position.z)
-            // console.warn(this.isFly,'speed: ', Data.instance.muL);
-            // console.warn(this.isFly,'backScene: ', this.node.position);
         }
     }
 

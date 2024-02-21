@@ -8,6 +8,7 @@ import EventCode from '../Common/EventCode';
 import { Animation } from 'cc';
 import { SpriteFrame } from 'cc';
 import { Sprite } from 'cc';
+import { TWO_PI } from 'cc';
 
 
 @ccclass('ShipController')
@@ -31,7 +32,6 @@ export class ShipController extends Component {
     }
     
     startGame(){
-        this.Astronaut.active = false;
         tween(this.node)
         .to(1, {position: new Vec3(0,0,0)})
         .start();
@@ -46,6 +46,13 @@ export class ShipController extends Component {
         this.Astronaut.position = this.node.position;
         gaEventEmitter.instance.emit(EventCode.STATE.WIN);
         this.fly();
+        tween(this.node)
+            .by(2, {position: new Vec3(0,1000,0)})
+            .call(()=>{
+                this.node.position = new Vec3(0,-230,0);
+                console.warn('reset');
+            })
+            .start();
     }
 
     fly(){
@@ -53,6 +60,7 @@ export class ShipController extends Component {
     }
 
     idle(){
+        this.ShipAnimation.stop();
         this.ShipSprite.node.active = true;
         this.ShipSprite.spriteFrame = this.ShipIdle;
         console.warn('prepare');

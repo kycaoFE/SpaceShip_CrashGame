@@ -93,13 +93,12 @@ export class MainController extends Component {
 
     public cashOut() {
         network.cashOut();
-        this.backSceneController.isFly = false;
-        this.restartRound();
+        // this.backSceneController.isFly = false;
     }
 
     public firedEvent() {
         this.Fire.active = false;
-        this.backSceneController.isFly = false;
+        // this.backSceneController.isFly = false;
         this.restartRound();
         this.uiController.firedEvent();
         this.gameController.isStartGame = false;
@@ -108,19 +107,20 @@ export class MainController extends Component {
 
     public claimGame() {
         this.Fire.active = false;
-        this.backSceneController.isFly = false;
+        // this.backSceneController.isFly = false;
         this.restartRound();
         this.isPlayerActive = false;
         this.uiController.claimGame();
     }
 
     restartRound(){
-        network.joiGame();
         this.scheduleOnce(()=>{
+            network.joiGame();
             this.backSceneController.restartRound();
-            this.uiController.preparing();
+            // this.Ship.active = true;
             this.Ship.position = new Vec3(0,-230,0);
             this.uiController.setMuL('0.0');
+            this.backSceneController.isFly = false;
             gaEventEmitter.instance.emit(EventCode.STATE.PREPARING);
         },2);
     }
@@ -129,15 +129,19 @@ export class MainController extends Component {
         console.warn('data: ', data);
         if(!data.player){
             Data.instance.modeGame = 'ng';
+            this.uiController.setModeButton('NORMAL GAME');
         }
         else{
-            if(data.player.fg > 0) {
+            if(data.player.fg >= 0) {
                 Data.instance.modeGame = 'fg';
+                this.uiController.setModeButton('FREE GAME');
             }
             else{
                 Data.instance.modeGame = 'ng';
+                this.uiController.setModeButton('NORMAL GAME');
             }
         }
+        this.uiController.preparing();
     }
 }
 

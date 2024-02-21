@@ -113,8 +113,12 @@ export class UIController extends Component {
     preparing(){
         this.openPrepareArea(true);
         this.buttonStart.node.active = true;
-        this.startLabel.string = 'START';
         this.muL.color = Color.WHITE;
+    }
+
+    public setModeButton(mode: string){
+        this.startLabel.string = mode;
+        this.startLabel.color = Color.BLACK;
     }
 }
 
