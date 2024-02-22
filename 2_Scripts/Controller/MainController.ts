@@ -118,11 +118,11 @@ export class MainController extends Component {
             this.uiController.setMuL('0.0');
             this.backSceneController.isFly = false;
             gaEventEmitter.instance.emit(EventCode.STATE.PREPARING);
-        },2);
+        },3);
     }
 
     checkStateGame(data){
-        console.warn('data: ', data);
+        // console.warn('data: ', data);
         if(!data.player){
             Data.instance.modeGame = 'ng';
             this.uiController.setModeButton('NORMAL');

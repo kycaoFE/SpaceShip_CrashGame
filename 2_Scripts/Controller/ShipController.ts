@@ -21,7 +21,6 @@ export class ShipController extends Component {
     @property(Sprite) shipSprite: Sprite;
     @property(Animation) shipAnimation: Animation;
     @property(SpriteFrame) shipIdle: SpriteFrame;
-    @property(Node) astronaut: Node;
 
     private shipSpeed: number;
     public isFly: boolean;
@@ -61,12 +60,10 @@ export class ShipController extends Component {
     }
 
     winGame(){
-        this.astronaut.active = true;
-        this.astronaut.position = this.node.position;
         gaEventEmitter.instance.emit(EventCode.STATE.WIN);
         this.fly();
         tween(this.node)
-            .by(2, {position: new Vec3(0,1000,0)})
+            .by(3, {position: new Vec3(0,1000,0)})
             .call(()=>{
                 this.node.position = new Vec3(0,-250,0);
                 console.warn('reset');
