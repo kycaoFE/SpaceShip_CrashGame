@@ -2,7 +2,11 @@ import { Data } from '../Common/Data';
 import gaEventEmitter from '../../../cc-common/cc30-arcade-base/Scripts/Common/gaEventEmitter';
 import { Label } from 'cc';
 import { Button } from 'cc';
+
 import { _decorator, Component, Node } from 'cc';
+import { ChangeMoney } from '../Common/ChangeMoney';
+
+const money = new ChangeMoney();
 const { ccclass, property } = _decorator;
 
 @ccclass('PreparingController')
@@ -21,7 +25,7 @@ export class PreparingController extends Component {
     private ratioStepValue: number;
 
     start() {
-        this.betStepValue = 10;
+        this.betStepValue = 100;
         this.ratioStepValue = 0.1;
         Data.instance.betValue = 100;
         Data.instance.ratioValue = 10.0;
@@ -40,10 +44,10 @@ export class PreparingController extends Component {
         this.panelChangeValue.active = status;
         this.isBet = isBet;
         if(isBet) {
-            this.setValueLabel(Data.instance.betValue);
+            this.setValueLabel(Data.instance.betValue, true);
         }
         else{
-            this.setValueLabel(Data.instance.ratioValue);
+            this.setValueLabel(Data.instance.ratioValue, false);
         }
         
     }
@@ -51,24 +55,28 @@ export class PreparingController extends Component {
     subClick(){
         if(this.isBet) {
             this.subBet();
-            this.setValueLabel(Data.instance.betValue);
+            this.setValueLabel(Data.instance.betValue, true);
             return;
         }
         this.subRatio();
-        this.setValueLabel(Data.instance.ratioValue);
+        this.setValueLabel(Data.instance.ratioValue, false);
     }
 
     minusClick(){
         if(this.isBet) {
             this.minusBet();
-            this.setValueLabel(Data.instance.betValue);
+            this.setValueLabel(Data.instance.betValue, true);
             return;
         }
         this.minusRatio();
-        this.setValueLabel(Data.instance.ratioValue);
+        this.setValueLabel(Data.instance.ratioValue, false);
     }
 
-    setValueLabel(value: number){
+    setValueLabel(value: number, isBetValue: boolean){
+        if(isBetValue) {
+            this.valueLabel.string = money.changeMoney(value);
+            return;
+        }
         this.valueLabel.string = value.toString();
     }
 

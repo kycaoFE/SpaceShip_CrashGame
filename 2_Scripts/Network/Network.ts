@@ -9,6 +9,10 @@ import gaCommandID from '../../../cc-common/cc30-arcade-base/Scripts/Network/gaC
 import gameCommonUtils from '../../../cc-common/cc-share/common/gameCommonUtils';
 import { Data } from '../Common/Data';
 
+import { network } from '../../../cc-common/cc30-arcade-base/Scripts/Definitions/gaCommon';
+const { PlayerInfoStateManager } = network;
+const playerInfoStateManager = PlayerInfoStateManager.getInstance();
+
 @ccclass('Network')
 export class Network extends Component {
     private socketManager: gaSocketManager;
@@ -47,7 +51,10 @@ export class Network extends Component {
             };
 
             this.sendMessage(payload)
-            .then(resolve())
+            .then(()=>{
+                this.updateWallet();
+                resolve()
+            })
         })
     }
 
@@ -61,7 +68,7 @@ export class Network extends Component {
 
     public startGame(bId: string, betValue: number, stopRatio: number) {
         //bet:autoStopRatio
-        let cus =1+":"+stopRatio;    
+        let cus =betValue+":"+stopRatio;    
 
         const payload = {
             event: Data.instance.modeGame,
@@ -75,7 +82,6 @@ export class Network extends Component {
             event: 'pa'
         }
         this.sendMessage(payload);
-        console.log('keep');
     }
 
     public getToken(): string {
@@ -110,6 +116,10 @@ export class Network extends Component {
             .then(resolve())
 
         })
+    }
+
+    updateWallet(){
+        console.warn('wallet', playerInfoStateManager.getWallets())
     }
 }
 

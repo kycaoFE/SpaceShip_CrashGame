@@ -3,7 +3,10 @@ import { Color } from 'cc';
 import { Button } from 'cc';
 import { Label } from 'cc';
 import { _decorator, Component, Node } from 'cc';
+import { ChangeMoney } from '../Common/ChangeMoney';
 const { ccclass, property } = _decorator;
+
+const money = new ChangeMoney();
 
 @ccclass('UIController')
 export class UIController extends Component {
@@ -11,6 +14,8 @@ export class UIController extends Component {
     @property(Node) PreparingControllerNode: Node;
     @property(Node) PreparingArea: Node;
     @property(Node) PanelChangeValue: Node;
+    @property(Node) moneyWin: Node;
+    @property(Label) moneyWinLabel: Label;
 
     @property(Label) muL: Label = null;
 
@@ -39,10 +44,12 @@ export class UIController extends Component {
     }
 
     setDefault(){
+        this.moneyWin.active = false;
+        this.moneyWinLabel.string = '0';
         this.popup.active = false;
         this.muL.node.active = false;
         this.PreparingArea.active = false;
-        this.betValueLabel.string = Data.instance.betValue.toString();
+        this.betValueLabel.string = money.changeMoney(Data.instance.betValue);
         this.ratioValueLabel.string = Data.instance.ratioValue.toString();
     }
 
@@ -75,7 +82,7 @@ export class UIController extends Component {
         }
         else{
             this.preparingController.activePanel(false, true);
-            this.betValueLabel.string = Data.instance.betValue.toString();
+            this.betValueLabel.string = money.changeMoney(Data.instance.betValue);
         }
     }
 
@@ -92,6 +99,7 @@ export class UIController extends Component {
     }
 
     startGame(){
+        this.moneyWin.active = true;
         this.openPrepareArea(false);
         this.startLabel.string = 'CASH OUT';
         this.startLabel.color = Color.GREEN;
@@ -112,10 +120,13 @@ export class UIController extends Component {
     setMuL(value: string){
         this.muL.node.active = true;
         this.muL.string = value+`x`;
+        const moneyWin = money.changeMoney(Number(value)*Data.instance.betValue)
+        this.moneyWinLabel.string = moneyWin;
     }
 
     preparing(){
         this.openPrepareArea(true);
+        this.moneyWin.active = false;
         this.buttonStart.node.active = true;
         this.muL.color = Color.WHITE;
     }
