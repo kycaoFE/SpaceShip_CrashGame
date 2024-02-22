@@ -15,20 +15,22 @@ import { Data } from '../Common/Data';
 @ccclass('ShipController')
 export class ShipController extends Component {
 
-    @property(Node) Fire: Node;
-    @property(Animation) FireAnimation: Animation;
-    @property(Animation) SmokeAnimation: Animation;
-    @property(Sprite) ShipSprite: Sprite;
-    @property(Animation) ShipAnimation: Animation;
-    @property(SpriteFrame) ShipIdle: SpriteFrame;
-    @property(Node) Astronaut: Node;
+    @property(Node) fire: Node;
+    @property(Animation) fireAnimation: Animation;
+    @property([Animation]) smokeAnimation: Animation[] = [];
+    @property(Sprite) shipSprite: Sprite;
+    @property(Animation) shipAnimation: Animation;
+    @property(SpriteFrame) shipIdle: SpriteFrame;
+    @property(Node) astronaut: Node;
 
     private shipSpeed: number;
     public isFly: boolean;
     public isFastFly: boolean;
 
     protected start(): void {
-        this.SmokeAnimation.node.active = false;
+        this.smokeAnimation.forEach(element => {
+            element.node.active = false;
+        });
         this.isFastFly = false;
         const explosion = this.firedEvent.bind(this);
         gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.FIRED_EVENT, explosion);
@@ -40,7 +42,7 @@ export class ShipController extends Component {
 
     protected update(dt: number): void {
         if(this.isFly) {
-            this.ShipAnimation.getState('fly').speed = 1/Data.instance.muL;
+            this.shipAnimation.getState('fly').speed = Data.instance.muL/10;
         }
         if(!this.isFastFly && this.node.position.y >= 0){
             this.fly();
@@ -59,14 +61,14 @@ export class ShipController extends Component {
     }
 
     winGame(){
-        this.Astronaut.active = true;
-        this.Astronaut.position = this.node.position;
+        this.astronaut.active = true;
+        this.astronaut.position = this.node.position;
         gaEventEmitter.instance.emit(EventCode.STATE.WIN);
         this.fly();
         tween(this.node)
             .by(2, {position: new Vec3(0,1000,0)})
             .call(()=>{
-                this.node.position = new Vec3(0,-230,0);
+                this.node.position = new Vec3(0,-250,0);
                 console.warn('reset');
             })
             .start();
@@ -74,36 +76,42 @@ export class ShipController extends Component {
 
     idle(){
         this.isFly = false;
-        this.Fire.active = false;
-        this.ShipAnimation.stop();
-        this.ShipSprite.node.active = true;
-        this.ShipSprite.spriteFrame = this.ShipIdle;
+        this.fire.active = false;
+        this.shipAnimation.stop();
+        this.shipSprite.node.active = true;
+        this.shipSprite.spriteFrame = this.shipIdle;
         console.warn('prepare');
     }
 
     fly(){
         this.isFly = true;
-        this.ShipAnimation.play('fly');
-        this.Fire.active = true;
-        this.SmokeAnimation.node.active = false;
+        this.shipAnimation.play('fly');
+        this.fire.active = true;
+        this.smokeAnimation.forEach(element => {
+            element.node.active = false;
+        });
     }
 
     beginFly(){
         this.isFastFly = false;
-        this.ShipAnimation.play('fly');
-        this.SmokeAnimation.node.active = true;
-        this.SmokeAnimation.play();
-        this.Fire.active = true;
-        this.FireAnimation.play('small_fire');
+        this.shipAnimation.play('fly');
+        this.smokeAnimation.forEach(element => {
+            element.node.active = true;
+            element.play();
+        });
+        this.fire.active = true;
+        this.fireAnimation.play('small_fire');
         this.scheduleOnce(()=>{
-            this.SmokeAnimation.node.active = false;
-            this.FireAnimation.play('ship_fire');
+            this.smokeAnimation.forEach(element => {
+                element.node.active = false;
+            });
+            this.fireAnimation.play('ship_fire');
         }, 0.78)
     }
 
     firedEvent(){
-        this.ShipAnimation.play('explosion');
-        this.Fire.active = false;
+        this.shipAnimation.play('explosion');
+        this.fire.active = false;
     }
 }
 

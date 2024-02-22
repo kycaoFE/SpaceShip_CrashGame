@@ -103,6 +103,7 @@ export class MainController extends Component {
 
     public claimGame() {
         // this.backSceneController.isFly = false;
+        this.gameController.isStartGame = false;
         this.restartRound();
         this.isPlayerActive = false;
         this.uiController.claimGame();
@@ -113,7 +114,7 @@ export class MainController extends Component {
             network.joiGame();
             this.backSceneController.restartRound();
             // this.Ship.active = true;
-            this.Ship.position = new Vec3(0,-230,0);
+            this.Ship.position = new Vec3(0,-250,0);
             this.uiController.setMuL('0.0');
             this.backSceneController.isFly = false;
             gaEventEmitter.instance.emit(EventCode.STATE.PREPARING);
