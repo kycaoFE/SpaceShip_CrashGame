@@ -66,7 +66,7 @@ export class ShipController extends Component {
             .by(3, {position: new Vec3(0,1000,0)})
             .call(()=>{
                 this.node.position = new Vec3(0,-250,0);
-                console.warn('reset');
+                console.warn('reset', this.node.position);
             })
             .start();
     }
@@ -77,7 +77,7 @@ export class ShipController extends Component {
         this.shipAnimation.stop();
         this.shipSprite.node.active = true;
         this.shipSprite.spriteFrame = this.shipIdle;
-        console.warn('prepare');
+        console.warn('prepare', this.node.position);
     }
 
     fly(){

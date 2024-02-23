@@ -73,9 +73,29 @@ export class PreparingController extends Component {
     }
 
     setValueLabel(value: number, isBetValue: boolean){
+        if(value <=0) {
+            this.minusButton.interactable = false;
+            this.subButton.interactable = true; 
+            return;
+        }
+
+        this.minusButton.interactable = true;
+        this.subButton.interactable = true; 
         if(isBetValue) {
             this.valueLabel.string = money.changeMoney(value);
+            if(value > Data.instance.walletAmount){
+                this.minusButton.interactable = true;
+                this.subButton.interactable = false;   
+            }
             return;
+        }
+        if(value >= 10) {
+            this.minusButton.interactable = true;
+            this.subButton.interactable = false;   
+        }
+        else {
+            this.minusButton.interactable = true;
+            this.subButton.interactable = true;   
         }
         this.valueLabel.string = value.toString();
     }

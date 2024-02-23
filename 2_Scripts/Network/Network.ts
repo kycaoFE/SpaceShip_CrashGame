@@ -119,7 +119,7 @@ export class Network extends Component {
     }
 
     updateWallet(){
-        console.warn('wallet', playerInfoStateManager.getWallets())
+        return playerInfoStateManager.getWallets();
     }
 }
 

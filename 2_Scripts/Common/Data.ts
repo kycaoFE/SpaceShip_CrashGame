@@ -40,4 +40,6 @@ export class Data{
 
     public modeGame: string;
 
+    public walletAmount: number;
+
 }

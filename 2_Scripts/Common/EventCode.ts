@@ -12,7 +12,7 @@ const EventCode = {
     },
 
     REQUEST: {
-
+        UPDATE_WALLET: 'UPDATE_WALLET',
     },
 
     RESPONSE: {

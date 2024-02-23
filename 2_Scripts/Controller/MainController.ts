@@ -42,7 +42,7 @@ export class MainController extends Component {
         gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.CLAIM_GAME, this.claimGame.bind(this));
         gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.FIRED_EVENT, this.firedEvent.bind(this));
         gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.JOIN_GAME_RESULT,this.checkStateGame.bind(this));
-
+        // gaEventEmitter.instance.registerEvent(EventCode.REQUEST.UPDATE_WALLET, this.updateWallet.bind(this));
     }
 
     protected update(dt: number): void {
@@ -72,7 +72,8 @@ export class MainController extends Component {
     private joinGame() {
         network.joiGame()
             .then(() => {
-                this.uiController.openPopup('Join game thành công', 2)
+                this.uiController.openPopup('Join game thành công', 2);
+                this.updateWallet();
             })
             .catch(() => {
                 this.uiController.openPopup('Join game thất bại', 2);
@@ -111,13 +112,13 @@ export class MainController extends Component {
 
     restartRound(){
         this.scheduleOnce(()=>{
-            network.joiGame();
-            this.backSceneController.restartRound();
-            // this.Ship.active = true;
-            this.Ship.position = new Vec3(0,-250,0);
-            this.uiController.setMuL('0.0');
-            this.backSceneController.isFly = false;
+            network.joiGame().then(()=>{
+                this.updateWallet();
+            });
             gaEventEmitter.instance.emit(EventCode.STATE.PREPARING);
+            // this.Ship.position = new Vec3(0,-250,0);
+            this.backSceneController.isFly = false;
+            this.Ship.active = false;
         },3);
     }
 
@@ -137,7 +138,16 @@ export class MainController extends Component {
                 this.uiController.setModeButton('NORMAL');
             }
         }
+        this.backSceneController.restartRound();
+        this.Ship.active = true;
+        this.Ship.position = new Vec3(0, -250, 0);
+        // this.uiController.setMuL('0.0');
         this.uiController.preparing();
+    }
+
+    public updateWallet(){
+        const wallet = network.updateWallet();
+        gaEventEmitter.instance.emit(EventCode.REQUEST.UPDATE_WALLET, wallet.amount);
     }
 }
 

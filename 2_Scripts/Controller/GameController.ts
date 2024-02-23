@@ -4,12 +4,14 @@ const { ccclass, property } = _decorator;
 import gaEventEmitter from '../../../cc-common/cc30-arcade-base/Scripts/Common/gaEventEmitter';
 import { Data } from '../Common/Data';
 import EventCode from '../Common/EventCode';
+import { Button } from 'cc';
 
 @ccclass('GameController')
 export class GameController extends Component {
 
     @property(Node) MainControllerNode: Node;
     @property(Node) UINode: Node;
+    @property(Button) startButton: Button;
 
     private mainController: any;
     private uiController: any;
@@ -21,6 +23,9 @@ export class GameController extends Component {
         this.isStartGame = false;
 
         gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.PLAYER_INFO_UPDATE, this.updateMuL.bind(this));
+        gaEventEmitter.instance.registerEvent(EventCode.STATE.PREPARING, ()=>{
+            this.startButton.interactable = true;
+        })
     }
 
     update(deltaTime: number) {
@@ -33,12 +38,13 @@ export class GameController extends Component {
 
     clickStart(){
         if(!this.isStartGame){
-            this.startGame();
             this.isStartGame = true;
+            this.startGame();
         }
         else{
-            this.cashOut();
             this.isStartGame = false
+            this.startButton.interactable = false;
+            this.cashOut();
         }
     }
 
