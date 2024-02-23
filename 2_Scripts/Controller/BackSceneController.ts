@@ -38,7 +38,7 @@ export class BackSceneController extends Component {
     }
 
     restartRound(){
-        this.node.position = new Vec3(0,0,0);
+        this.node.position = new Vec3(0,20,0);
     }
 
     shipFly(){

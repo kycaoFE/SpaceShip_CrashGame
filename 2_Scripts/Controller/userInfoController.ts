@@ -24,6 +24,7 @@ export class userInfoController extends Component {
         gaEventEmitter.instance.registerEvent(EventCode.REQUEST.UPDATE_WALLET, this.updateWallet.bind(this));
         gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.CLAIM_GAME, this.changeWalletWin.bind(this));
         this.moneyBet.node.active = false;
+        this.walletLabel.node.parent.active = false;
     }
 
     update(deltaTime: number) {
@@ -31,6 +32,7 @@ export class userInfoController extends Component {
     }
 
     updateWallet(data){
+        this.walletLabel.node.parent.active = true;
         const walletAmount = (data - 2493)/1000;
         Data.instance.walletAmount = walletAmount;
         this.walletLabel.string = money.changeMoney(walletAmount);

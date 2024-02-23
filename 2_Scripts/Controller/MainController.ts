@@ -62,21 +62,21 @@ export class MainController extends Component {
     private login() {
         network.authenticate()
             .then(() => {
-                this.uiController.openPopup('Đăng nhập thành công', 2);
+                // this.uiController.openPopup('Đăng nhập thành công', 1);
             })
             .catch(() => {
-                this.uiController.openPopup('Đăng nhập thất bại', 2);
+                this.uiController.openPopup('Đăng nhập thất bại', 1);
             })
     }
 
     private joinGame() {
         network.joiGame()
             .then(() => {
-                this.uiController.openPopup('Join game thành công', 2);
+                // this.uiController.openPopup('Join game thành công', 1);
                 this.updateWallet();
             })
             .catch(() => {
-                this.uiController.openPopup('Join game thất bại', 2);
+                this.uiController.openPopup('Join game thất bại', 1);
             })
     }
 
@@ -140,7 +140,7 @@ export class MainController extends Component {
         }
         this.backSceneController.restartRound();
         this.Ship.active = true;
-        this.Ship.position = new Vec3(0, -250, 0);
+        this.Ship.position = new Vec3(0, -230, 0);
         // this.uiController.setMuL('0.0');
         this.uiController.preparing();
     }

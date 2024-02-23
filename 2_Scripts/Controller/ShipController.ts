@@ -65,7 +65,7 @@ export class ShipController extends Component {
         tween(this.node)
             .by(3, {position: new Vec3(0,1000,0)})
             .call(()=>{
-                this.node.position = new Vec3(0,-250,0);
+                this.node.position = new Vec3(0,-230,0);
                 console.warn('reset', this.node.position);
             })
             .start();

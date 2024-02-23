@@ -16,18 +16,13 @@ export class LoginController extends Component {
 
     preloadMainScene() {
         this.loadingBar.node.active = true;
+        this.loadMainScreen();
         director.preloadScene("MainScene", (completedCount, totalCount) => {
-            if(totalCount > 100) {
                 var progress = (completedCount / totalCount);
                 this.loadingBar.progress = progress;
-            }
-            else{
-                var progress = (completedCount /140);
-                this.loadingBar.progress = progress;
-            }  
         }, (error) => {
             if (!error) {
-                this.loadMainScreen();
+
             } else {
                 console.error(error);
             }

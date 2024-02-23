@@ -51,6 +51,7 @@ export class UIController extends Component {
     setDefault(){
         this.moneyWin.active = false;
         this.moneyWinLabel.string = '0';
+        this.buttonStart.node.active = false;
         this.popup.active = false;
         this.muL.node.active = false;
         this.PreparingArea.active = false;
@@ -121,6 +122,7 @@ export class UIController extends Component {
         if(this.ratioButtonStatus){
             this.clickRatioButton();
         }
+        this.setMuL('0.0');
         this.moneyWin.active = true;
         this.openPrepareArea(false);
         this.startLabel.string = 'CASH OUT';
@@ -145,7 +147,7 @@ export class UIController extends Component {
 
     setMuL(value: string){
         this.muL.node.active = true;
-        this.muL.string = value+`x`;
+        this.muL.string = Number(value).toFixed(1)+`x`;
         const moneyWin = money.changeMoney(Number(value)*Data.instance.betValue)
         this.moneyWinLabel.string = moneyWin;
     }
