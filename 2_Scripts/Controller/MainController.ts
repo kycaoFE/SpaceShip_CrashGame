@@ -7,6 +7,7 @@ import { Network } from '../Network/Network';
 import { Data } from '../Common/Data';
 import { AnimationClip } from 'cc';
 import { Vec3 } from 'cc';
+import gaEventsCode from '../../../cc-common/cc30-arcade-base/Scripts/Definitions/gaEventsCode';
 const network = new Network();
 
 @ccclass('MainController')
@@ -42,6 +43,8 @@ export class MainController extends Component {
         gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.CLAIM_GAME, this.claimGame.bind(this));
         gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.FIRED_EVENT, this.firedEvent.bind(this));
         gaEventEmitter.instance.registerEvent(EventCode.RESPONSE.JOIN_GAME_RESULT,this.checkStateGame.bind(this));
+        gaEventEmitter.instance.registerEvent(gaEventsCode.NETWORK.CANNOT_AUTHEN, this.cantNotAuthen.bind(this));
+        gaEventEmitter.instance.registerEvent(gaEventsCode.NETWORK.WEB_SOCKET_TEMP_DISCONNECT, this.disconnectToNetwork.bind(this));
         // gaEventEmitter.instance.registerEvent(EventCode.REQUEST.UPDATE_WALLET, this.updateWallet.bind(this));
     }
 
@@ -62,21 +65,22 @@ export class MainController extends Component {
     private login() {
         network.authenticate()
             .then(() => {
-                // this.uiController.openPopup('Đăng nhập thành công', 1);
+
             })
             .catch(() => {
-                this.uiController.openPopup('Đăng nhập thất bại', 1);
+                this.uiController.openPopup('Đăng nhập thất bại', 0);
             })
     }
 
     private joinGame() {
+        this.uiController.openPopup('Đăng nhập thành công', 1);
         network.joiGame()
             .then(() => {
                 // this.uiController.openPopup('Join game thành công', 1);
                 this.updateWallet();
             })
             .catch(() => {
-                this.uiController.openPopup('Join game thất bại', 1);
+                this.uiController.openPopup('Join game thất bại', 0);
             })
     }
 
@@ -123,7 +127,6 @@ export class MainController extends Component {
     }
 
     checkStateGame(data){
-        // console.warn('data: ', data);
         if(!data.player){
             Data.instance.modeGame = 'ng';
             this.uiController.setModeButton('NORMAL');
@@ -148,6 +151,14 @@ export class MainController extends Component {
     public updateWallet(){
         const wallet = network.updateWallet();
         gaEventEmitter.instance.emit(EventCode.REQUEST.UPDATE_WALLET, wallet.amount);
+    }
+
+    cantNotAuthen(){
+        this.uiController.openPopup('Đăng nhập thất bại', 0);
+    }
+
+    disconnectToNetwork(){
+        this.uiController.openPopup('Mất kết nối...', 0);
     }
 }
 

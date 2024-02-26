@@ -5,6 +5,11 @@ import { Label } from 'cc';
 import { _decorator, Component, Node } from 'cc';
 import { ChangeMoney } from '../Common/ChangeMoney';
 import { Sprite } from 'cc';
+import gaEventEmitter from '../../../cc-common/cc30-arcade-base/Scripts/Common/gaEventEmitter';
+import gaEventsCode from '../../../cc-common/cc30-arcade-base/Scripts/Definitions/gaEventsCode';
+import { tween } from 'cc';
+import { ProgressBar } from 'cc';
+import { Vec3 } from 'cc';
 const { ccclass, property } = _decorator;
 
 const money = new ChangeMoney();
@@ -31,6 +36,9 @@ export class UIController extends Component {
     @property(Button) buttonStart: Button;
     @property(Label) startLabel: Label;
 
+    @property(ProgressBar) flyProgressBar: ProgressBar;
+    @property(Node) iconFlyProgressBar: Node;
+
     betButtonStatus: boolean = false;
     ratioButtonStatus: boolean = false;
 
@@ -46,9 +54,11 @@ export class UIController extends Component {
     start() {
         this.preparingController = this.PreparingControllerNode.getComponent('PreparingController');
         this._userInfoController = this.userInfoController.getComponent('userInfoController');
+
     }
 
     setDefault(){
+        this.flyProgressBar.node.active = false;
         this.moneyWin.active = false;
         this.moneyWinLabel.string = '0';
         this.buttonStart.node.active = false;
@@ -56,7 +66,7 @@ export class UIController extends Component {
         this.muL.node.active = false;
         this.PreparingArea.active = false;
         this.betValueLabel.string = money.changeMoney(Data.instance.betValue);
-        this.ratioValueLabel.string = Data.instance.ratioValue.toString();
+        this.ratioValueLabel.string = Data.instance.ratioValue.toFixed(1);
     }
 
     openPrepareArea(status: boolean){
@@ -109,7 +119,7 @@ export class UIController extends Component {
         }
         else{
             this.preparingController.activePanel(false, false);
-            this.ratioValueLabel.string = Data.instance.ratioValue.toString();
+            this.ratioValueLabel.string = Data.instance.ratioValue.toFixed(1);
             this.ratioValueButton.node.getComponent(Sprite).color = Color.WHITE;
         }
     }
@@ -122,7 +132,11 @@ export class UIController extends Component {
         if(this.ratioButtonStatus){
             this.clickRatioButton();
         }
+        this.flyProgressBar.node.active = true;
         this.setMuL('0.0');
+        // this.flyProgressBar.node.active = true;
+        this.iconFlyProgressBar.position = new Vec3(-140,0,0)
+        this.updateFylProgressBar(0.0);
         this.moneyWin.active = true;
         this.openPrepareArea(false);
         this.startLabel.string = 'CASH OUT';
@@ -153,6 +167,7 @@ export class UIController extends Component {
     }
 
     preparing(){
+        this.flyProgressBar.node.active = false;
         this.openPrepareArea(true);
         this.moneyWin.active = false;
         this.buttonStart.node.active = true;
@@ -163,6 +178,23 @@ export class UIController extends Component {
         this.startLabel.string = mode;
         this.startLabel.color = Color.BLACK;
     }
+
+    uiAnimation(node: Node, duration: any, start: any, end: any, ...callback: any){
+        tween(node)
+        .to(duration, {position: end})
+        .call(()=>{
+            callback();
+        })
+        .start()
+    }
+
+    updateFylProgressBar(progress: number){
+        this.flyProgressBar.progress = progress;
+        this.iconFlyProgressBar.position = new Vec3((-140 + 300* progress), 0, 0);
+        console.log('fly: ', progress, this.iconFlyProgressBar.position)
+    }
+
+
 
 }
 

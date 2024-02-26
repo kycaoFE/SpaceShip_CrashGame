@@ -27,8 +27,6 @@ export class PreparingController extends Component {
     start() {
         this.betStepValue = 100;
         this.ratioStepValue = 0.1;
-        Data.instance.betValue = 100;
-        Data.instance.ratioValue = 10.0;
         this.setDefault();
     }
 
@@ -97,7 +95,7 @@ export class PreparingController extends Component {
             this.minusButton.interactable = true;
             this.subButton.interactable = true;   
         }
-        this.valueLabel.string = value.toString();
+        this.valueLabel.string = value.toFixed(1);
     }
 
     subBet(){

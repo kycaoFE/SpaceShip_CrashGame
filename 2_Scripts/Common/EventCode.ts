@@ -1,5 +1,6 @@
 const EventCode = {
     SERVER: {
+        ERROR: 'ERROR',
         EVENT: "EVENT",
         GENERATE_TOKEN: "GENERATE_TOKEN",
         RECEIVED_TOKEN: "RECEIVED_TOKEN",

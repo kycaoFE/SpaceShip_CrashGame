@@ -59,6 +59,7 @@ export class GameController extends Component {
     updateMuL(data){
         Data.instance.muL = data.player.mul;
         this.uiController.setMuL(data.player.mul);
+        this.uiController.updateFylProgressBar(data.player.mul/10);
     }
 }
 

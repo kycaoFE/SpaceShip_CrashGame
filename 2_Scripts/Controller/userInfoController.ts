@@ -36,7 +36,6 @@ export class userInfoController extends Component {
         const walletAmount = (data - 2493)/1000;
         Data.instance.walletAmount = walletAmount;
         this.walletLabel.string = money.changeMoney(walletAmount);
-        console.warn(money.changeMoney(walletAmount), typeof(money.changeMoney(walletAmount)));
     }
 
     changeWalletStart(){

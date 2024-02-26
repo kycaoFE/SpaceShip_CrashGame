@@ -11,7 +11,7 @@ export class Data{
 
     private _betValue: number = 100;
     public get betValue(){
-        return Number(this._betValue.toFixed(2));
+        return Number(this._betValue.toFixed(1));
     }
 
     public set betValue(betValue: number){
@@ -19,9 +19,9 @@ export class Data{
     }
 
 
-    private _ratioValue: number = 10.0;
+    private _ratioValue: number = 5.0;
     public get ratioValue(){
-        return Number(this._ratioValue.toFixed(2));
+        return Number(this._ratioValue.toFixed(1));
     }
 
     public set ratioValue(ratioValue: number){
