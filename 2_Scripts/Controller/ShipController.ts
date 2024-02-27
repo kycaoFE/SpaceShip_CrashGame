@@ -8,7 +8,6 @@ import EventCode from '../Common/EventCode';
 import { Animation } from 'cc';
 import { SpriteFrame } from 'cc';
 import { Sprite } from 'cc';
-import { TWO_PI } from 'cc';
 import { Data } from '../Common/Data';
 
 
@@ -21,8 +20,10 @@ export class ShipController extends Component {
     @property(Sprite) shipSprite: Sprite;
     @property(Animation) shipAnimation: Animation;
     @property(SpriteFrame) shipIdle: SpriteFrame;
+    @property(Sprite) iconFlyRace: Sprite;
 
     private shipSpeed: number;
+    public startRound: boolean = false;
     public isFly: boolean;
     public isFastFly: boolean;
 
@@ -50,6 +51,7 @@ export class ShipController extends Component {
     }
     
     startGame(){
+        this.startRound = true;
         this.beginFly();
         // tween(this.node)
         // .to(0.78, {position: new Vec3(0,0,0)})
@@ -71,6 +73,7 @@ export class ShipController extends Component {
     }
 
     idle(){
+        this.startRound = false;
         this.isFly = false;
         this.fire.active = false;
         this.shipAnimation.stop();
@@ -107,6 +110,11 @@ export class ShipController extends Component {
     firedEvent(){
         this.shipAnimation.play('explosion');
         this.fire.active = false;
+    }
+
+    setShipIdle(spriteFrame: SpriteFrame){
+        this.shipIdle = spriteFrame;
+        this.iconFlyRace.spriteFrame = spriteFrame
     }
 }
 
