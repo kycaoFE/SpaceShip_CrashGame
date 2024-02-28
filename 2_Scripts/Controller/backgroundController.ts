@@ -18,7 +18,6 @@ export class backgroundController extends Component {
     private isMoving: boolean;
     private isTouch: boolean;
     private _shipController: any;
-    private numShipCurrent: number;
 
 
     start() {
@@ -26,7 +25,6 @@ export class backgroundController extends Component {
         this.locationDeltaMouse = new Vec2(0, 0);
         this.isMoving = false;
         this.isTouch = false;
-        this.numShipCurrent = 1;
 
         this.node.on(Node.EventType.TOUCH_START, (event) => {
             this.isTouch = true;
@@ -89,7 +87,6 @@ export class backgroundController extends Component {
                 .call(() => {
                     const backgroundTemp = this.spriteArray[0];
                     for (let i = 0; i < this.spriteArray.length; i++) {
-                        console.warn(i, this.spriteArray[i]);
                         if (i == this.spriteArray.length - 1) {
                             this.spriteArray[i] = backgroundTemp;
                         }
