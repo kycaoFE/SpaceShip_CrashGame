@@ -22,6 +22,7 @@ export class UIController extends Component {
     @property(Node) PanelChangeValue: Node;
     @property(Node) moneyWin: Node;
     @property(Node) userInfoController: Node;
+    @property(Node) buttonChangeShip: Node;
     @property(Sprite) moneyWinSprite: Sprite;
     @property(Label) moneyWinLabel: Label;
 
@@ -65,6 +66,7 @@ export class UIController extends Component {
         this.popup.active = false;
         this.muL.node.active = false;
         this.PreparingArea.active = false;
+        this.buttonChangeShip.active = true;
         this.betValueLabel.string = money.changeMoney(Data.instance.betValue);
         this.ratioValueLabel.string = Data.instance.ratioValue.toFixed(1);
     }
@@ -144,6 +146,7 @@ export class UIController extends Component {
         this.muL.color = Color.WHITE;
         this.moneyWinSprite.color = Color.WHITE;
         this._userInfoController.changeWalletStart();
+        this.buttonChangeShip.active = false;
         console.warn('startGame');
     }
 
@@ -168,6 +171,7 @@ export class UIController extends Component {
 
     preparing(){
         this.flyProgressBar.node.active = false;
+        this.buttonChangeShip.active = true;
         this.openPrepareArea(true);
         this.moneyWin.active = false;
         this.buttonStart.node.active = true;

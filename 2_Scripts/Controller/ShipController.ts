@@ -18,6 +18,7 @@ export class ShipController extends Component {
     @property(Animation) fireAnimation: Animation;
     @property([Animation]) smokeAnimation: Animation[] = [];
     @property(Sprite) shipSprite: Sprite;
+    @property(Node) containerShip: Node;
     @property(Animation) shipAnimation: Animation;
     @property(SpriteFrame) shipIdle: SpriteFrame;
     @property(Sprite) iconFlyRace: Sprite;
@@ -78,6 +79,7 @@ export class ShipController extends Component {
         this.fire.active = false;
         this.shipAnimation.stop();
         this.shipSprite.node.active = true;
+        this.containerShip.active = true;
         this.shipSprite.spriteFrame = this.shipIdle;
     }
 

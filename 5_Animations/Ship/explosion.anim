@@ -11,7 +11,7 @@
     "speed": 0.5,
     "wrapMode": 0,
     "enableTrsBlending": false,
-    "_duration": 0.18333333333333332,
+    "_duration": 0.16666666666666666,
     "_hash": 500763545,
     "_tracks": [
       {
@@ -19,6 +19,9 @@
       },
       {
         "__id__": 7
+      },
+      {
+        "__id__": 12
       }
     ],
     "_exoticAnimation": null,
@@ -52,7 +55,7 @@
   },
   {
     "__type__": "cc.animation.HierarchyPath",
-    "path": "Container_Ship/Sprite_M"
+    "path": "Explosion"
   },
   {
     "__type__": "cc.animation.ComponentPath",
@@ -145,7 +148,7 @@
   },
   {
     "__type__": "cc.animation.HierarchyPath",
-    "path": "Container_Ship/Sprite_M"
+    "path": "Container_Ship"
   },
   {
     "__type__": "cc.animation.Channel",
@@ -156,8 +159,49 @@
   {
     "__type__": "cc.ObjectCurve",
     "_times": [
+      0
+    ],
+    "_values": [
+      false
+    ]
+  },
+  {
+    "__type__": "cc.animation.ObjectTrack",
+    "_binding": {
+      "__type__": "cc.animation.TrackBinding",
+      "path": {
+        "__id__": 13
+      },
+      "proxy": null
+    },
+    "_channel": {
+      "__id__": 15
+    }
+  },
+  {
+    "__type__": "cc.animation.TrackPath",
+    "_paths": [
+      {
+        "__id__": 14
+      },
+      "active"
+    ]
+  },
+  {
+    "__type__": "cc.animation.HierarchyPath",
+    "path": "Explosion"
+  },
+  {
+    "__type__": "cc.animation.Channel",
+    "_curve": {
+      "__id__": 16
+    }
+  },
+  {
+    "__type__": "cc.ObjectCurve",
+    "_times": [
       0,
-      0.18333333333333332
+      0.16666666666666666
     ],
     "_values": [
       true,

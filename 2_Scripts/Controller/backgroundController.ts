@@ -5,15 +5,15 @@ import { Vec2 } from 'cc';
 import { _decorator, Component, Node } from 'cc';
 const { ccclass, property } = _decorator;
 
-@ccclass('containerShipController')
-export class containerShipController extends Component {
+@ccclass('backgroundController')
+export class backgroundController extends Component {
 
-    @property(Sprite) spriteArray: Sprite[] = [];
+    @property(Node) spriteArray: Node[] = [];
     @property(Node) shipController: Node;
     @property positionMove: number = 0;
 
 
-
+    private positionArray: Array<number> = [-1152, 0, 1152];
     private locationDeltaMouse: Vec2;
     private isMoving: boolean;
     private isTouch: boolean;
@@ -28,7 +28,6 @@ export class containerShipController extends Component {
         this.isTouch = false;
         this.numShipCurrent = 1;
 
-        this._shipController.setShipIdle(this.spriteArray[1].spriteFrame);
         this.node.on(Node.EventType.TOUCH_START, (event) => {
             this.isTouch = true;
         })
@@ -53,10 +52,6 @@ export class containerShipController extends Component {
     update(deltaTime: number) {
         if (this.node.position.x < 5 && this.node.position.x > -5) return;
         if (this.isTouch) {
-            this.spriteArray.forEach(element => {
-                const scaleX = 1.5 - (Math.abs((this.node.position.x + element.node.position.x) * 2 / 1000))
-                element.node.scale = new Vec3(scaleX, scaleX, scaleX)
-            });
             return
         };
         if (this.isMoving) return;
@@ -70,7 +65,6 @@ export class containerShipController extends Component {
     }
 
     checkInMid() {
-        console.log('check');
         if (this.node.position.x > 5) {
             this.isMoving = true;
             this.isTouch = true;
@@ -91,20 +85,23 @@ export class containerShipController extends Component {
 
     getRightShip(){
         tween(this.node)
-                .to(0.5, { position: new Vec3(-this.positionMove, 0, 0) })
+                .to(0.5, { position: new Vec3(-1152, 0, 0) })
                 .call(() => {
-                    const tempSprite = this.spriteArray[0].spriteFrame;
+                    const backgroundTemp = this.spriteArray[0];
                     for (let i = 0; i < this.spriteArray.length; i++) {
-                        if (i < this.spriteArray.length - 1) {
-                            this.spriteArray[i].spriteFrame = this.spriteArray[i + 1].spriteFrame;
+                        console.warn(i, this.spriteArray[i]);
+                        if (i == this.spriteArray.length - 1) {
+                            this.spriteArray[i] = backgroundTemp;
                         }
-                        else {
-                            this.spriteArray[i].spriteFrame = tempSprite;
+                        else{
+                            this.spriteArray[i] = this.spriteArray[i + 1];
                         }
                     }
+                    for (let i = 0; i < this.spriteArray.length; i++) {
+                        this.spriteArray[i].position = new Vec3(this.positionArray[i], this.spriteArray[i].position.y);
+                    }
+       
                     this.node.position = new Vec3(0, 0, 0);
-                    this.spriteArray[1].node.scale = new Vec3(1.5, 1.5, 1.5);
-                    this._shipController.setShipIdle(this.spriteArray[1].spriteFrame);
                     return true;
                 })
                 .start()
@@ -112,20 +109,21 @@ export class containerShipController extends Component {
 
     getLeftShip(){
         tween(this.node)
-                .to(0.5, { position: new Vec3(this.positionMove, 0, 0) })
+                .to(0.5, { position: new Vec3(1152, 0, 0) })
                 .call(() => {
-                    const tempSprite = this.spriteArray[this.spriteArray.length - 1].spriteFrame;
+                    const backgroundTemp = this.spriteArray[this.spriteArray.length - 1];
                     for (let i = this.spriteArray.length - 1; i >= 0; i--) {
-                        if (i > 0) {
-                            this.spriteArray[i].spriteFrame = this.spriteArray[i - 1].spriteFrame;
+                        if (i == 0) {
+                            this.spriteArray[i] = backgroundTemp;
                         }
-                        else {
-                            this.spriteArray[i].spriteFrame = tempSprite;
+                        else{
+                            this.spriteArray[i] = this.spriteArray[i - 1];
                         }
                     }
+                    for (let i = 0; i < this.spriteArray.length; i++) {
+                        this.spriteArray[i].position = new Vec3(this.positionArray[i], this.spriteArray[i].position.y);
+                    }
                     this.node.position = new Vec3(0, 0, 0);
-                    this.spriteArray[1].node.scale = new Vec3(1.5, 1.5, 1.5);
-                    this._shipController.setShipIdle(this.spriteArray[1].spriteFrame);
                     return true;
                 })
                 .start()
