@@ -15,6 +15,7 @@ export class Data{
     }
 
     public set betValue(betValue: number){
+        if(betValue <= 0 || betValue >= this.walletAmount) return;
         this._betValue = betValue;
     }
 
@@ -25,6 +26,7 @@ export class Data{
     }
 
     public set ratioValue(ratioValue: number){
+        if(ratioValue <=0 || ratioValue > 10) return;
         this._ratioValue = ratioValue;
     }
 

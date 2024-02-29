@@ -27,7 +27,7 @@ export class falingStarSpawner extends Component {
         const fallingStar = instantiate(this.fallingStar);
         fallingStar.parent = this.node;
         const backgroundPositionY = this.node.parent.position.y; 
-        fallingStar.position = new Vec3((Math.random()*580) - 580, (Math.random()*640) - 640 - backgroundPositionY + 400);
+        fallingStar.position = new Vec3((Math.random()*(580+580) - 580, (Math.random()*(640+640) - 640 - backgroundPositionY + 400)));
     }
 }
 

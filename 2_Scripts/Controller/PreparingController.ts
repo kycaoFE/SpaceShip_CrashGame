@@ -23,15 +23,52 @@ export class PreparingController extends Component {
 
     private betStepValue: number;
     private ratioStepValue: number;
+    private isPress: boolean = false;
+    private isSub: boolean = false;
+    private timePressCurrent: number;
+    private timeIsHold: number =  0.2;
 
     start() {
+        this.subButton.node.on(Node.EventType.TOUCH_START, (event)=>{
+            this.isPress = true;
+            this.timePressCurrent = 0;
+            this.timeIsHold = 0.2;
+            this.isSub = true;
+        })
+        this.subButton.node.on(Node.EventType.TOUCH_END, (event)=>{
+            this.isPress = false;
+        })
+        this.minusButton.node.on(Node.EventType.TOUCH_START, (event)=>{
+            this.isPress = true;
+            this.timePressCurrent = 0;
+            this.timeIsHold = 0.2;
+            this.isSub = false;
+        })
+        this.minusButton.node.on(Node.EventType.TOUCH_END, (event)=>{
+            this.isPress = false;
+        })
         this.betStepValue = 100;
         this.ratioStepValue = 0.1;
         this.setDefault();
     }
 
     update(deltaTime: number) {
-        
+        if(!this.isPress) return;
+
+        this.timePressCurrent += deltaTime;
+        if(this.timeIsHold <= 0.05){
+            this.timeIsHold = 0.05;
+        }
+        if(this.timePressCurrent >= this.timeIsHold && this.isSub){
+            this.timePressCurrent = 0;
+            this.timeIsHold -= 0.01;
+            this.subClick()
+        }
+        else if(this.timePressCurrent >= this.timeIsHold && !this.isSub){
+            this.timePressCurrent = 0;
+            this.timeIsHold -= 0.01;
+            this.minusClick()
+        }
     }
 
     setDefault(){
@@ -71,7 +108,13 @@ export class PreparingController extends Component {
     }
 
     setValueLabel(value: number, isBetValue: boolean){
-        if(value <=0) {
+        if(isBetValue && value <= 100) {
+            this.minusButton.interactable = false;
+            this.subButton.interactable = true; 
+            this.valueLabel.string = money.changeMoney(value);
+            return;
+        }
+        if(value <= 0) {
             this.minusButton.interactable = false;
             this.subButton.interactable = true; 
             return;
@@ -81,7 +124,7 @@ export class PreparingController extends Component {
         this.subButton.interactable = true; 
         if(isBetValue) {
             this.valueLabel.string = money.changeMoney(value);
-            if(value > Data.instance.walletAmount){
+            if(value >= Data.instance.walletAmount){
                 this.minusButton.interactable = true;
                 this.subButton.interactable = false;   
             }
