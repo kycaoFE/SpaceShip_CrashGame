@@ -3,7 +3,7 @@ import { Color } from 'cc';
 import { Button } from 'cc';
 import { Label } from 'cc';
 import { _decorator, Component, Node } from 'cc';
-import { ChangeMoney } from '../Common/ChangeMoney';
+import { FormatMoney } from '../Common/formatMoneyVi';
 import { Sprite } from 'cc';
 import gaEventEmitter from '../../../cc-common/cc30-arcade-base/Scripts/Common/gaEventEmitter';
 import gaEventsCode from '../../../cc-common/cc30-arcade-base/Scripts/Definitions/gaEventsCode';
@@ -12,7 +12,7 @@ import { ProgressBar } from 'cc';
 import { Vec3 } from 'cc';
 const { ccclass, property } = _decorator;
 
-const money = new ChangeMoney();
+const money = new FormatMoney();
 
 @ccclass('UIController')
 export class UIController extends Component {
@@ -67,7 +67,7 @@ export class UIController extends Component {
         this.muL.node.active = false;
         this.PreparingArea.active = false;
         this.buttonChangeShip.active = true;
-        this.betValueLabel.string = money.changeMoney(Data.instance.betValue);
+        this.betValueLabel.string = money.formatMoney(Data.instance.betValue);
         this.ratioValueLabel.string = Data.instance.ratioValue.toFixed(1);
     }
 
@@ -104,7 +104,7 @@ export class UIController extends Component {
         }
         else{
             this.preparingController.activePanel(false, true);
-            this.betValueLabel.string = money.changeMoney(Data.instance.betValue);
+            this.betValueLabel.string = money.formatMoney(Data.instance.betValue);
             this.betValueButton.node.getComponent(Sprite).color = Color.WHITE;
         }
     }
@@ -165,7 +165,7 @@ export class UIController extends Component {
     setMuL(value: string){
         this.muL.node.active = true;
         this.muL.string = Number(value).toFixed(1)+`x`;
-        const moneyWin = money.changeMoney(Number(value)*Data.instance.betValue)
+        const moneyWin = money.formatMoney(Number(value)*Data.instance.betValue)
         this.moneyWinLabel.string = moneyWin;
     }
 

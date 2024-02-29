@@ -30,6 +30,13 @@ export class Data{
         this._ratioValue = ratioValue;
     }
 
+    public maxRatioStopValue: number = 10;
+    public minRatioStopValue: number = 0.1;
+    public minBetValue: number = 100;
+
+    public betStepDefault: number = 100;
+    public ratioStepDefault: number = 0.1;
+
 
     private _eventData = null;
     set eventData(event: any){
