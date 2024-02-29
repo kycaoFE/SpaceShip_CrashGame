@@ -134,7 +134,7 @@ export class MainController extends Component {
         else{
             if(data.player.fg >= 0) {
                 Data.instance.modeGame = 'fg';
-                this.uiController.setModeButton('FREE');
+                this.uiController.setModeButton('FREE: '+ data.player.fg);
             }
             else{
                 Data.instance.modeGame = 'ng';
