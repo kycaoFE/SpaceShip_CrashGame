@@ -9,7 +9,7 @@ export class Data{
         this._muL = value;
     }
 
-    private _betValue: number = 100;
+    private _betValue: number = 1;
     public get betValue(){
         return Number(this._betValue.toFixed(1));
     }
@@ -26,17 +26,48 @@ export class Data{
     }
 
     public set ratioValue(ratioValue: number){
-        if(ratioValue <=0 || ratioValue > 10) return;
+        if(ratioValue <=0 || ratioValue > this.maxRatioValue) return;
         this._ratioValue = ratioValue;
     }
 
-    public maxRatioStopValue: number = 10;
-    public minRatioStopValue: number = 0.1;
-    public minBetValue: number = 100;
+    public minRatioValue: number = 0.1;
+    public maxRatioValue: number = 100;
 
-    public betStepDefault: number = 100;
+    public minRatioStep: number = 0.1;
+    public maxRatioStep: number = 10;
+
     public ratioStepDefault: number = 0.1;
 
+    public minBetValue: number = 1;
+    public minBetStep: number = 1;
+    public maxBetStep: number = 500;
+
+    public betStepDefault: number = 1;
+
+
+
+
+    private _betStep: number = this.minBetValue;
+    public get betStep(){
+        return this._betStep;
+    }
+    public set betStep(value: number){
+        this._betStep = value;
+        if(value >= this.maxBetStep) this._betStep = this.maxBetStep;
+        if(value >= this.walletAmount - this.betValue) this._betStep = this.walletAmount - this.betValue - this.minBetValue;
+        if(value <= this.minBetStep) this._betStep = this.minBetValue;
+    }
+
+    private _ratioStep: number = this.minRatioValue;
+    public get ratioStep(){
+        return this._ratioStep;
+    }
+    public set ratioStep(value: number){
+        this._ratioStep = value;
+        if(value >= this.maxRatioStep) this._ratioStep = this.maxRatioStep;
+        if(value >= this.maxRatioValue - this.ratioValue) this._ratioStep = this.maxRatioValue - this.ratioValue - this.minRatioValue;
+        if(value <= this.minRatioStep) this._ratioStep = this.minRatioValue;
+    }
 
     private _eventData = null;
     set eventData(event: any){

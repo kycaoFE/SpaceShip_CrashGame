@@ -1,5 +1,6 @@
 import { Vec3, SpriteFrame } from 'cc';
 import { tween } from 'cc';
+import { Button } from 'cc';
 import { Sprite } from 'cc';
 import { Vec2 } from 'cc';
 import { _decorator, Component, Node } from 'cc';
@@ -10,6 +11,8 @@ export class containerShipController extends Component {
 
     @property(Sprite) spriteArray: Sprite[] = [];
     @property(Node) shipController: Node;
+    @property(Button) scrollButton: Button[] = []
+
     @property positionMove: number = 0;
 
 
@@ -17,8 +20,10 @@ export class containerShipController extends Component {
     private locationDeltaMouse: Vec2;
     private isMoving: boolean;
     private isTouch: boolean;
+    private isScrolling: boolean;
     private _shipController: any;
     private numShipCurrent: number;
+    private timeMinChange: number;
 
 
     start() {
@@ -26,24 +31,29 @@ export class containerShipController extends Component {
         this.locationDeltaMouse = new Vec2(0, 0);
         this.isMoving = false;
         this.isTouch = false;
+        this.isScrolling = false;
         this.numShipCurrent = 1;
+        this.timeMinChange = 1;
 
         this._shipController.setShipIdle(this.spriteArray[1].spriteFrame);
         this.node.on(Node.EventType.TOUCH_START, (event) => {
             this.isTouch = true;
         })
         this.node.on(Node.EventType.TOUCH_MOVE, (event) => {
-            if (this._shipController.startRound) return;
+            if (this._shipController.startRound ) return;
+            this.scrollButton.forEach(button => {
+                button.node.active = false
+            });
             this.moveContainer(event);
         }, this);
         this.node.on(Node.EventType.TOUCH_END, (event) => {
-            if (this.isTouch) {
+            if (this.isTouch ) {
                 this.isMoving = false;
                 this.isTouch = false;
             }
         }, this);
         this.node.on(Node.EventType.TOUCH_CANCEL, (event) => {
-            if (this.isTouch) {
+            if (this.isTouch ) {
                 this.isMoving = false;
                 this.isTouch = false;
             }
@@ -53,9 +63,8 @@ export class containerShipController extends Component {
     update(deltaTime: number) {
         if (this.node.position.x < 5 && this.node.position.x > -5) return;
         if (this.isTouch) {
-            this.spriteArray.forEach(element => {
-                const scaleX = 1.5 - (Math.abs((this.node.position.x + element.node.position.x) * 2 / 1000))
-                element.node.scale = new Vec3(scaleX, scaleX, scaleX)
+            this.spriteArray.forEach(sprite => {
+                this.scaleShip(sprite.node, 1.5)
             });
             return
         };
@@ -84,12 +93,15 @@ export class containerShipController extends Component {
         return false;
     }
 
-    scaleShip(ship: Sprite, duration: number, scale: Vec3) {
-        tween(ship.node)
-            .to(duration, { scale: scale })
+    scaleShip(target: Node, scaleTarget: number) {
+            const scaleX = scaleTarget - (Math.abs((this.node.position.x + target.position.x) * 2 / 1000))
+            target.scale = new Vec3(scaleX, scaleX, scaleX)
     }
 
+
     getRightShip(){
+        if(this.isScrolling) return;
+        this.isScrolling = true;
         tween(this.node)
                 .to(0.5, { position: new Vec3(-this.positionMove, 0, 0) })
                 .call(() => {
@@ -105,12 +117,18 @@ export class containerShipController extends Component {
                     this.node.position = new Vec3(0, 0, 0);
                     this.spriteArray[1].node.scale = new Vec3(1.5, 1.5, 1.5);
                     this._shipController.setShipIdle(this.spriteArray[1].spriteFrame);
+                    this.isScrolling = false;
+                    this.scrollButton.forEach(button => {
+                        button.node.active = true
+                    });
                     return true;
                 })
                 .start()
     }
 
     getLeftShip(){
+        if(this.isScrolling) return;
+        this.isScrolling = true;
         tween(this.node)
                 .to(0.5, { position: new Vec3(this.positionMove, 0, 0) })
                 .call(() => {
@@ -126,6 +144,10 @@ export class containerShipController extends Component {
                     this.node.position = new Vec3(0, 0, 0);
                     this.spriteArray[1].node.scale = new Vec3(1.5, 1.5, 1.5);
                     this._shipController.setShipIdle(this.spriteArray[1].spriteFrame);
+                    this.isScrolling = false;
+                    this.scrollButton.forEach(button => {
+                        button.node.active = true
+                    });
                     return true;
                 })
                 .start()

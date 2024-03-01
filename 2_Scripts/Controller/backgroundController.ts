@@ -17,6 +17,7 @@ export class backgroundController extends Component {
     private locationDeltaMouse: Vec2;
     private isMoving: boolean;
     private isTouch: boolean;
+    private isScrolling: boolean;
     private _shipController: any;
 
 
@@ -25,6 +26,7 @@ export class backgroundController extends Component {
         this.locationDeltaMouse = new Vec2(0, 0);
         this.isMoving = false;
         this.isTouch = false;
+        this.isScrolling = false;
 
         this.node.on(Node.EventType.TOUCH_START, (event) => {
             this.isTouch = true;
@@ -82,6 +84,8 @@ export class backgroundController extends Component {
     }
 
     getRightShip(){
+        if(this.isScrolling) return;
+        this.isScrolling = true;
         tween(this.node)
                 .to(0.5, { position: new Vec3(-1152, 0, 0) })
                 .call(() => {
@@ -99,12 +103,15 @@ export class backgroundController extends Component {
                     }
        
                     this.node.position = new Vec3(0, 0, 0);
+                    this.isScrolling = false;
                     return true;
                 })
                 .start()
     }
 
     getLeftShip(){
+        if(this.isScrolling) return;
+        this.isScrolling = true;
         tween(this.node)
                 .to(0.5, { position: new Vec3(1152, 0, 0) })
                 .call(() => {
@@ -121,6 +128,7 @@ export class backgroundController extends Component {
                         this.spriteArray[i].position = new Vec3(this.positionArray[i], this.spriteArray[i].position.y);
                     }
                     this.node.position = new Vec3(0, 0, 0);
+                    this.isScrolling = false;
                     return true;
                 })
                 .start()

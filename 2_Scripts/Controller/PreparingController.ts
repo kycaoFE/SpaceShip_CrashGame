@@ -1,7 +1,7 @@
 import { Label, Button } from 'cc';
 import { _decorator, Component, Node } from 'cc';
 
-import { Data, } from '../Common/Data';
+import { Data,  } from '../Common/Data';
 
 import { FormatMoney } from '../Common/formatMoneyVi';
 const money = new FormatMoney();
@@ -82,7 +82,7 @@ export class PreparingController extends Component {
             }
             return;
         }
-        if (value >= Data.instance.maxRatioStopValue) {
+        if (value >= Data.instance.maxRatioValue) {
             this.minusButton.interactable = true;
             this.subButton.interactable = false;
         }
@@ -94,22 +94,23 @@ export class PreparingController extends Component {
     }
 
     subClick() {
+        console.warn('sub');
         if (this.isBet) {
-            Data.instance.betValue = Data.instance.betValue + this.betStepValue;
+            Data.instance.betValue = Data.instance.betValue + Data.instance.betStep;
             this.setValueLabel(Data.instance.betValue, true);
             return;
         }
-        Data.instance.ratioValue = Data.instance.ratioValue + this.ratioStepValue;
+        Data.instance.ratioValue = Data.instance.ratioValue + Data.instance.ratioStep;
         this.setValueLabel(Data.instance.ratioValue, false);
     }
 
     minusClick() {
         if (this.isBet) {
-            Data.instance.betValue = Data.instance.betValue - this.betStepValue;
+            Data.instance.betValue = Data.instance.betValue - Data.instance.betStep;
             this.setValueLabel(Data.instance.betValue, true);
             return;
         }
-        Data.instance.ratioValue = Data.instance.ratioValue - this.ratioStepValue;
+        Data.instance.ratioValue = Data.instance.ratioValue - Data.instance.ratioStep;
         this.setValueLabel(Data.instance.ratioValue, false);
     }
 
@@ -119,41 +120,57 @@ export class PreparingController extends Component {
             this.timePressCurrent = 0;
             this.timeIsHold = 0.2;
             this.stateButton = stateButton;
+            console.warn('start touch');
         })
         node.on(Node.EventType.TOUCH_END, (event) => {
             this.isPress = false;
             this.stateButton = '';
             this.countHoldNum = 0;
-            this.betStepValue = Data.instance.betStepDefault;
-            this.ratioStepValue = Data.instance.ratioStepDefault;
+            Data.instance.betStep = Data.instance.betStepDefault;
+            Data.instance.ratioStep = Data.instance.ratioStepDefault;
+            console.warn('end touch');
         })
     }
 
-    limitTimeHold() {
-        if (this.timeIsHold <= 0.05) {
-            this.timeIsHold = 0.05;
+    limitTimeHold(value: number) {
+        if (this.timeIsHold <= value) {
+            this.timeIsHold = value;
         }
     }
 
-    checkEventHold(...callback: Array<Button>) {
-        this.limitTimeHold();
+    setStepValue(){
+        Data.instance.betStep = this.betStepValue;
+        Data.instance.ratioStep = this.ratioStepValue;
+    }
+
+    checkEventHold() {
         if (this.timePressCurrent >= this.timeIsHold) {
             this.timePressCurrent = 0;
             this.timeIsHold -= 0.01;
+            this.limitTimeHold(0.01);
             this.countHoldNum++;
-            if(this.countHoldNum >= 10){
-                this.betStepValue += 100;
-                this.ratioStepValue += 0.1;
-            }
             switch (this.stateButton) {
                 case 'sub':
+                    if(this.countHoldNum >= 10){
+                        this.betStepValue += 1;
+                        this.ratioStepValue += 0.1;
+                        this.setStepValue();
+                        this.countHoldNum = 0;
+                    }
                     this.subClick();
                     break;
                 case 'minus':
+                    if(this.countHoldNum >= 10){
+                        this.betStepValue -= 1;
+                        this.ratioStepValue -= 0.1;
+                        this.setStepValue();
+                        this.countHoldNum = 0;
+                    }
                     this.minusClick();
                     break;
             }
         }
+        // console.warn(this.betStepValue, this.ratioStepValue);
     }
 }
 
