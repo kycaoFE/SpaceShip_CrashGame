@@ -60,15 +60,16 @@ export class UIController extends Component {
 
     setDefault(){
         this.flyProgressBar.node.active = false;
+        this.moneyWinLabel.string = '0K';
         this.moneyWin.active = false;
-        this.moneyWinLabel.string = '0';
         this.buttonStart.node.active = false;
         this.popup.active = false;
         this.muL.node.active = false;
         this.PreparingArea.active = false;
         this.buttonChangeShip.active = true;
-        this.betValueLabel.string = money.formatMoney(Data.instance.betValue);
-        this.ratioValueLabel.string = Data.instance.ratioValue.toFixed(1);
+        this.betValueLabel.string = '--';
+        this.ratioValueLabel.string = 'NONE';
+        this.enableButtonStart(false);
     }
 
     openPrepareArea(status: boolean){
@@ -104,8 +105,13 @@ export class UIController extends Component {
         }
         else{
             this.preparingController.activePanel(false, true);
-            this.betValueLabel.string = money.formatMoney(Data.instance.betValue);
             this.betValueButton.node.getComponent(Sprite).color = Color.WHITE;
+            if(Data.instance.betValue <= 0) {
+                this.betValueLabel.string = '--';
+                return;
+            }
+            this.betValueLabel.string = money.formatMoney(Data.instance.betValue);
+
         }
     }
 
@@ -121,8 +127,12 @@ export class UIController extends Component {
         }
         else{
             this.preparingController.activePanel(false, false);
-            this.ratioValueLabel.string = Data.instance.ratioValue.toFixed(1);
             this.ratioValueButton.node.getComponent(Sprite).color = Color.WHITE;
+            if(Data.instance.ratioValue == 0){
+                this.ratioValueLabel.string = 'NONE';
+                return;
+            }
+            this.ratioValueLabel.string = Data.instance.ratioValue.toFixed(1);
         }
     }
 
@@ -135,16 +145,16 @@ export class UIController extends Component {
             this.clickRatioButton();
         }
         this.flyProgressBar.node.active = true;
+        this.moneyWin.active = true;
         this.setMuL('0.0');
-        // this.flyProgressBar.node.active = true;
         this.iconFlyProgressBar.position = new Vec3(-140,0,0)
         this.updateFylProgressBar(0.0);
-        this.moneyWin.active = true;
         this.openPrepareArea(false);
         this.startLabel.string = 'CASH OUT';
-        this.startLabel.color = Color.GREEN;
         this.muL.color = Color.WHITE;
         this.moneyWinSprite.color = Color.WHITE;
+        this.buttonStart.node.getComponent(Sprite).color = Color.GREEN;
+        this.buttonStart
         this._userInfoController.changeWalletStart();
         this.buttonChangeShip.active = false;
         console.warn('startGame');
@@ -170,6 +180,12 @@ export class UIController extends Component {
     }
 
     preparing(){
+        if(Data.instance.betValue <= 0) {
+            this.enableButtonStart(false);
+        }
+        else{
+            this.enableButtonStart(true);
+        }
         this.flyProgressBar.node.active = false;
         this.buttonChangeShip.active = true;
         this.openPrepareArea(true);
@@ -193,9 +209,19 @@ export class UIController extends Component {
     }
 
     updateFylProgressBar(progress: number){
-        this.flyProgressBar.progress = progress;
-        this.iconFlyProgressBar.position = new Vec3((-140 + 300* progress), 0, 0);
+        this.flyProgressBar.progress = progress/10;
+        this.iconFlyProgressBar.position = new Vec3((-140 + (300* progress)/10), 0, 0);
         console.log('fly: ', progress, this.iconFlyProgressBar.position)
+    }
+
+    enableButtonStart(state: boolean){
+        if(state){
+            this.buttonStart.interactable = true;
+            this.buttonStart.node.getComponent(Sprite).color = Color.YELLOW;
+            return;
+        }
+        this.buttonStart.interactable = false;
+        this.buttonStart.node.getComponent(Sprite).color = Color.GRAY;
     }
 
 

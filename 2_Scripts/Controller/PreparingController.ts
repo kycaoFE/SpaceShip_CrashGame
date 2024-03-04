@@ -14,6 +14,7 @@ export class PreparingController extends Component {
     @property(Button) minusButton: Button;
 
     @property(Node) panelChangeValue: Node;
+    @property(Node) ui: Node;
 
     @property(Label) valueLabel: Label;
 
@@ -28,7 +29,10 @@ export class PreparingController extends Component {
 
     private stateButton: string = '';
 
+    private uiController: any;
+
     start() {
+        this.uiController = this.ui.getComponent('UIController');
         this.registerEventHold(this.subButton.node, 'sub');
         this.registerEventHold(this.minusButton.node, 'minus');
         this.betStepValue = Data.instance.betStepDefault;
@@ -48,6 +52,7 @@ export class PreparingController extends Component {
     }
 
     activePanel(status: boolean, isBet: boolean) {
+        this.uiController.buttonChangeShip.active = !status;
         this.panelChangeValue.active = status;
         this.isBet = isBet;
         if (isBet) {
@@ -60,22 +65,17 @@ export class PreparingController extends Component {
     }
 
     setValueLabel(value: number, isBetValue: boolean) {
-        if (isBetValue && value <= Data.instance.minBetValue) {
-            this.minusButton.interactable = false;
-            this.subButton.interactable = true;
-            this.valueLabel.string = money.formatMoney(value);
-            return;
-        }
-        if (value <= 0) {
-            this.minusButton.interactable = false;
-            this.subButton.interactable = true;
-            return;
-        }
-
         this.minusButton.interactable = true;
         this.subButton.interactable = true;
         if (isBetValue) {
-            this.valueLabel.string = money.formatMoney(value);
+            if(value <= Data.instance.minBetValue) {
+                this.valueLabel.string = '--';
+                this.uiController.enableButtonStart(false);
+            }
+            else {
+                this.valueLabel.string = money.formatMoney(value);
+                this.uiController.enableButtonStart(true);
+            }
             if (value >= Data.instance.walletAmount) {
                 this.minusButton.interactable = true;
                 this.subButton.interactable = false;
@@ -90,11 +90,19 @@ export class PreparingController extends Component {
             this.minusButton.interactable = true;
             this.subButton.interactable = true;
         }
+        if(value <= 0) {
+            this.valueLabel.string = 'NONE';
+            return;
+        }
         this.valueLabel.string = value.toFixed(1);
+        if (value < 0) {
+            this.minusButton.interactable = false;
+            this.subButton.interactable = true;
+            return;
+        }
     }
 
     subClick() {
-        console.warn('sub');
         if (this.isBet) {
             Data.instance.betValue = Data.instance.betValue + Data.instance.betStep;
             this.setValueLabel(Data.instance.betValue, true);
@@ -116,6 +124,8 @@ export class PreparingController extends Component {
 
     registerEventHold(node: Node, stateButton: string) {
         node.on(Node.EventType.TOUCH_START, (event) => {
+            if(stateButton == 'sub') this.subClick();
+            if(stateButton == 'minus') this.minusClick();
             this.isPress = true;
             this.timePressCurrent = 0;
             this.timeIsHold = 0.2;

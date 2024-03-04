@@ -9,24 +9,24 @@ export class Data{
         this._muL = value;
     }
 
-    private _betValue: number = 1;
+    private _betValue: number = 0;
     public get betValue(){
         return Number(this._betValue.toFixed(1));
     }
 
     public set betValue(betValue: number){
-        if(betValue <= 0 || betValue >= this.walletAmount) return;
+        if(betValue < 0 || betValue >= this.walletAmount) return;
         this._betValue = betValue;
     }
 
 
-    private _ratioValue: number = 5.0;
+    private _ratioValue: number = 0;
     public get ratioValue(){
         return Number(this._ratioValue.toFixed(1));
     }
 
     public set ratioValue(ratioValue: number){
-        if(ratioValue <=0 || ratioValue > this.maxRatioValue) return;
+        if(ratioValue < 0 || ratioValue > this.maxRatioValue) return;
         this._ratioValue = ratioValue;
     }
 
@@ -38,7 +38,7 @@ export class Data{
 
     public ratioStepDefault: number = 0.1;
 
-    public minBetValue: number = 1;
+    public minBetValue: number = 0;
     public minBetStep: number = 1;
     public maxBetStep: number = 500;
 
@@ -47,7 +47,7 @@ export class Data{
 
 
 
-    private _betStep: number = this.minBetValue;
+    private _betStep: number = this.minBetStep;
     public get betStep(){
         return this._betStep;
     }
@@ -55,7 +55,7 @@ export class Data{
         this._betStep = value;
         if(value >= this.maxBetStep) this._betStep = this.maxBetStep;
         if(value >= this.walletAmount - this.betValue) this._betStep = this.walletAmount - this.betValue - this.minBetValue;
-        if(value <= this.minBetStep) this._betStep = this.minBetValue;
+        if(value <= this.minBetStep) this._betStep = this.minBetStep;
     }
 
     private _ratioStep: number = this.minRatioValue;
@@ -66,7 +66,7 @@ export class Data{
         this._ratioStep = value;
         if(value >= this.maxRatioStep) this._ratioStep = this.maxRatioStep;
         if(value >= this.maxRatioValue - this.ratioValue) this._ratioStep = this.maxRatioValue - this.ratioValue - this.minRatioValue;
-        if(value <= this.minRatioStep) this._ratioStep = this.minRatioValue;
+        if(value <= this.minRatioStep) this._ratioStep = this.minRatioStep;
     }
 
     private _eventData = null;

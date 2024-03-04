@@ -132,9 +132,9 @@ export class MainController extends Component {
             this.uiController.setModeButton('NORMAL');
         }
         else{
-            if(data.player.fg >= 0) {
+            if(data.player.fRe > 0) {
                 Data.instance.modeGame = 'fg';
-                this.uiController.setModeButton('FREE: '+ data.player.fg);
+                this.uiController.setModeButton('FREE: '+ data.player.fRe);
             }
             else{
                 Data.instance.modeGame = 'ng';
